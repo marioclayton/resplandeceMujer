@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Cuprum&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cuprum:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+
+
+:root {
+  
+
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary-color: #501E16;
+  --secondary-color: #2ecc71;
+  --font-size: 16px;
+  
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  font-family: "Noto Sans", sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cuprum", sans-serif;
+}
+
+h1, h2 {
+  font-size: 3.0rem;
+  font-weight: lighter;
+}
+
+
+
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.darkBG {
+  background-color: var(--primary-color);
+}
+
+.primaryButton {
+  background-color: white;
+  color: black;
+  width: 120px;
+  border-radius: 30px;
+  border-color: white;
+}
+
+.secondaryButton {
+  background-color: transparent;
+  color: white;
+  width: 120px;
+  border-radius: 30px;
+  border-color: balck;
+}
