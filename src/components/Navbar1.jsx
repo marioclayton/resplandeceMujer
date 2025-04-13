@@ -24,9 +24,21 @@ const useRelume = () => {
 
 export function Navbar1() {
   const [isClient, setIsClient] = useState(false);
+  const [hasBackground, setHasBackground] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasBackground(true);
+      } else {
+        setHasBackground(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const useActive = useRelume();
@@ -36,10 +48,12 @@ export function Navbar1() {
   return (
     <section
       id="relume"
-      className="z-[999] flex w-full items-center relative lg:min-h-18 lg:px-[5%] "
+      className={`z-[999] fixed top-0 left-0 w-full items-center transition-colors duration-300 ${
+        hasBackground ? "bg-[#0a0a0a] shadow-md" : "bg-transparent"
+      }`}
     >
       <div className="size-full lg:flex lg:items-center lg:justify-between max-w-[1240px] mx-auto">
-        <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
+        <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-16 lg:min-h-16 lg:px-0">
           <a href="/">
             <img
               src="https://d22po4pjz3o32e.cloudfront.net/logo-image.svg"

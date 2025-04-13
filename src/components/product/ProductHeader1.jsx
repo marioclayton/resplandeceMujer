@@ -22,11 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@relume_io/relume-ui";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import React, { Fragment, useEffect, useState } from "react";
 import clsx from "clsx";
 import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
-
-
 
 const Star = ({ rating }) => {
   const fullStars = Math.floor(rating);
@@ -81,8 +80,20 @@ const useCarousel = () => {
   };
 };
 
-export function ProductHeader1() {
+export function ProductHeader1({ product }) {
   const useActive = useCarousel();
+
+  if (!product) return null;
+
+  const {
+    productName,
+    productImage,
+    productDescription,
+    price,
+    productCategory,
+    externalUrl,
+  } = product.fields;
+
   return (
     <header id="relume" className="px-[5%] py-12 md:py-16 lg:py-20">
       <div className="container">
@@ -90,19 +101,21 @@ export function ProductHeader1() {
           <BreadcrumbList>
             <Fragment>
               <BreadcrumbItem>
-                <BreadcrumbLink href="#">Ver todo</BreadcrumbLink>
+                <BreadcrumbLink href="/">Ver todo</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
             </Fragment>
             <Fragment>
               <BreadcrumbItem>
-                <BreadcrumbLink href="#">Categoría</BreadcrumbLink>
+                <BreadcrumbLink href={`/category/${productCategory}`}>
+                  {productCategory}
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
             </Fragment>
             <Fragment>
               <BreadcrumbItem>
-                <BreadcrumbLink href="#">Nombre del producto</BreadcrumbLink>
+                <BreadcrumbLink href="#">{productName}</BreadcrumbLink>
               </BreadcrumbItem>
             </Fragment>
           </BreadcrumbList>
@@ -128,44 +141,8 @@ export function ProductHeader1() {
                         className={useActive.getThumbStyles(0)}
                       >
                         <img
-                          src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                          alt="Relume placeholder image 1"
-                          className="aspect-[5/6] size-full object-cover"
-                        />
-                      </button>
-                    </CarouselItem>
-                    <CarouselItem className="p-0">
-                      <button
-                        onClick={useActive.handleClick(1)}
-                        className={useActive.getThumbStyles(1)}
-                      >
-                        <img
-                          src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                          alt="Relume placeholder image 2"
-                          className="aspect-[5/6] size-full object-cover"
-                        />
-                      </button>
-                    </CarouselItem>
-                    <CarouselItem className="p-0">
-                      <button
-                        onClick={useActive.handleClick(2)}
-                        className={useActive.getThumbStyles(2)}
-                      >
-                        <img
-                          src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                          alt="Relume placeholder image 3"
-                          className="aspect-[5/6] size-full object-cover"
-                        />
-                      </button>
-                    </CarouselItem>
-                    <CarouselItem className="p-0">
-                      <button
-                        onClick={useActive.handleClick(3)}
-                        className={useActive.getThumbStyles(3)}
-                      >
-                        <img
-                          src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                          alt="Relume placeholder image 4"
+                          src={productImage.fields.file.url}
+                          alt={productName}
                           className="aspect-[5/6] size-full object-cover"
                         />
                       </button>
@@ -184,35 +161,8 @@ export function ProductHeader1() {
                   <CarouselItem className="basis-full pl-0">
                     <button>
                       <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                        alt="Relume placeholder image 1"
-                        className="aspect-[5/6] size-full object-cover"
-                      />
-                    </button>
-                  </CarouselItem>
-                  <CarouselItem className="basis-full pl-0">
-                    <button>
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                        alt="Relume placeholder image 2"
-                        className="aspect-[5/6] size-full object-cover"
-                      />
-                    </button>
-                  </CarouselItem>
-                  <CarouselItem className="basis-full pl-0">
-                    <button>
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                        alt="Relume placeholder image 3"
-                        className="aspect-[5/6] size-full object-cover"
-                      />
-                    </button>
-                  </CarouselItem>
-                  <CarouselItem className="basis-full pl-0">
-                    <button>
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-                        alt="Relume placeholder image 4"
+                        src={productImage.fields.file.url}
+                        alt={productName}
                         className="aspect-[5/6] size-full object-cover"
                       />
                     </button>
@@ -223,18 +173,18 @@ export function ProductHeader1() {
           </div>
           <div>
             <h1 className="mb-2 text-4xl leading-[1.2] font-bold md:text-5xl lg:text-6xl">
-              Nombre del producto
+              {productName}
             </h1>
-            <p className="mb-5 text-xl font-bold md:mb-6 md:text-2xl">$55</p>
+            <p className="mb-5 text-xl font-bold md:mb-6 md:text-2xl">
+              ${price}
+            </p>
             <div className="mb-5 flex flex-wrap items-center gap-3 md:mb-6">
               <Star rating={3.5} />
               <p className="text-sm">(3.5 estrellas) • 10 opiniones</p>
             </div>
-            <p className="mb-5 md:mb-6">
-              Descubre nuestra selección de productos diseñados especialmente
-              para ti. Cada artículo combina calidad y estilo, perfecto para tu
-              vida diaria.
-            </p>
+            <div className="mb-5 md:mb-6">
+              {documentToReactComponents(productDescription)}
+            </div>
             <form className="mb-8">
               <div className="grid grid-cols-1 gap-6">
                 <div className="flex flex-col">
