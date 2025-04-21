@@ -3,84 +3,78 @@
 import { Badge, Button } from "@relume_io/relume-ui";
 import React from "react";
 import { RxChevronRight } from "react-icons/rx";
+import Image from 'next/image';
+import Link from 'next/link';
+import { createClient } from 'contentful';
 
-export function Blog46() {
+// Initialize Contentful client for fetching related posts
+const client = createClient({
+  space: process.env.CONTENTFUL_SPACE_ID,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+});
+
+export async function Blog46({ post }) {
+  // Get the current post's categories or tags for finding related posts
+  const currentTags = post.fields.tags || [];
+  const currentId = post.sys.id;
+  
+  // Fetch related posts
+  const response = await client.getEntries({
+    content_type: 'blogPost',
+    limit: 3,
+    'sys.id[ne]': currentId, // Exclude current post
+    // You could add filter by tags here if needed
+  });
+  
+  const relatedPosts = response.items;
+  
+  // If no related posts, don't render the component
+  if (!relatedPosts.length) return null;
+
   return (
-    <section id="relume" className="px-[5%] py-16 md:py-24 lg:py-28">
-      <div className="container">
-        <div className="mb-12 md:mb-18 lg:mb-20">
-          <div className="mx-auto w-full max-w-lg text-center">
-            <p className="mb-3 font-semibold md:mb-4">Blog</p>
-            <h2 className="rb-5 mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
-              Artículos Recomendados para Ti
-            </h2>
-            <p className="md:text-md">
-              Explora más sobre tu fe y crecimiento personal.
-            </p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-x-12">
-          <div className="flex size-full flex-col items-start justify-start text-start">
-            <a href="#" className="mb-6 w-full">
-              <img
-                src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
-                alt="Relume placeholder image"
-                className="aspect-video size-full rounded-image object-cover"
-              />
-            </a>
-            <div className="rb-4 mb-4 flex w-full items-center justify-start">
-              <Badge className="mr-4">Espiritualidad</Badge>
-              <p className="inline text-sm font-semibold">5 min lectura</p>
-            </div>
-            <a className="mb-2 flex justify-start text-start" href="#">
-              <h2 className="text-xl font-bold md:text-2xl">
-                Fortalece tu fe diariamente
-              </h2>
-            </a>
-            <p>Descubre cómo aplicar la fe en tu vida cotidiana.</p>
-            <Button
-              title="Leer más"
-              variant="link"
-              size="link"
-              iconRight={<RxChevronRight />}
-              className="mt-6 flex items-center justify-center gap-x-2"
+    <div className="bg-white py-16">
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold mb-10 text-center">Related Posts</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {relatedPosts.map((relatedPost) => (
+            <Link 
+              href={`/blog/${relatedPost.fields.blogSlug}`} 
+              key={relatedPost.sys.id}
+              className="group"
             >
-              Leer más
-            </Button>
-          </div>
-          <div className="flex size-full flex-col items-start justify-start text-start">
-            <a href="#" className="mb-6 w-full">
-              <img
-                src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
-                alt="Relume placeholder image"
-                className="aspect-video size-full rounded-image object-cover"
-              />
-            </a>
-            <div className="rb-4 mb-4 flex w-full items-center justify-start">
-              <Badge className="mr-4">Inspiración</Badge>
-              <p className="inline text-sm font-semibold">5 min lectura</p>
-            </div>
-            <a className="mb-2 flex justify-start text-start" href="#">
-              <h2 className="text-xl font-bold md:text-2xl">
-                Reflexiones sobre la vida cristiana
-              </h2>
-            </a>
-            <p>Encuentra paz y propósito a través de la oración.</p>
-            <Button
-              title="Leer más"
-              variant="link"
-              size="link"
-              iconRight={<RxChevronRight />}
-              className="mt-6 flex items-center justify-center gap-x-2"
-            >
-              Leer más
-            </Button>
-          </div>
-        </div>
-        <div className="mt-12 flex items-center justify-center md:mt-20">
-          <Button variant="secondary">Ver todos</Button>
+              <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                {relatedPost.fields.featuredImage && (
+                  <div className="relative h-48 overflow-hidden">
+                    <Image
+                      src={`https:${relatedPost.fields.featuredImage.fields.file.url}`}
+                      alt={relatedPost.fields.title}
+                      fill
+                      className="object-cover transition-transform group-hover:scale-105"
+                    />
+                  </div>
+                )}
+                
+                <div className="p-5">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600">
+                    {relatedPost.fields.title}
+                  </h3>
+                  
+                  {relatedPost.fields.excerpt && (
+                    <p className="text-gray-600 line-clamp-2">
+                      {relatedPost.fields.excerpt}
+                    </p>
+                  )}
+                  
+                  <div className="mt-4 flex justify-between items-center">
+                    <span className="text-blue-600 font-medium">Read more</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

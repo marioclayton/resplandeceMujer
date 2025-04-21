@@ -1,152 +1,59 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@relume_io/relume-ui";
-import React, { Fragment } from "react";
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
+import Image from 'next/image';
+import Link from 'next/link';
 
-export function Content27() {
+export function Content27({ post }) {
+  const { content } = post.fields;
+  
+  // Configure the rich text renderer options
+  const options = {
+    renderMark: {
+      [MARKS.BOLD]: (text) => <strong className="font-bold">{text}</strong>,
+      [MARKS.ITALIC]: (text) => <em className="italic">{text}</em>,
+      [MARKS.UNDERLINE]: (text) => <span className="underline">{text}</span>,
+    },
+    renderNode: {
+      [BLOCKS.PARAGRAPH]: (node, children) => <p className="mb-6 text-lg leading-relaxed">{children}</p>,
+      [BLOCKS.HEADING_1]: (node, children) => <h1 className="text-4xl font-bold mb-4 mt-10">{children}</h1>,
+      [BLOCKS.HEADING_2]: (node, children) => <h2 className="text-3xl font-bold mb-4 mt-8">{children}</h2>,
+      [BLOCKS.HEADING_3]: (node, children) => <h3 className="text-2xl font-bold mb-3 mt-6">{children}</h3>,
+      [BLOCKS.HEADING_4]: (node, children) => <h4 className="text-xl font-bold mb-3 mt-6">{children}</h4>,
+      [BLOCKS.UL_LIST]: (node, children) => <ul className="list-disc pl-8 mb-6 text-lg">{children}</ul>,
+      [BLOCKS.OL_LIST]: (node, children) => <ol className="list-decimal pl-8 mb-6 text-lg">{children}</ol>,
+      [BLOCKS.LIST_ITEM]: (node, children) => <li className="mb-2">{children}</li>,
+      [BLOCKS.QUOTE]: (node, children) => <blockquote className="border-l-4 border-gray-300 pl-4 italic my-6">{children}</blockquote>,
+      [BLOCKS.HR]: () => <hr className="my-8 border-t border-gray-300" />,
+      [INLINES.HYPERLINK]: (node, children) => {
+        return <Link href={node.data.uri} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">{children}</Link>;
+      },
+      [BLOCKS.EMBEDDED_ASSET]: (node) => {
+        const { title, description, file } = node.data.target.fields;
+        const { url, details } = file;
+        const { image } = details;
+        const { width, height } = image || { width: 800, height: 600 };
+        
+        return (
+          <div className="my-8">
+            <Image
+              src={`https:${url}`}
+              alt={description || title || "Blog image"}
+              width={width}
+              height={height}
+              className="rounded-lg mx-auto"
+            />
+            {title && <p className="text-center text-sm text-gray-500 mt-2">{title}</p>}
+          </div>
+        );
+      },
+    },
+  };
+
   return (
-    <section id="relume" className="px-[5%] py-16 md:py-24 lg:py-28">
-      <div className="container">
-        <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-[20rem_1fr] lg:gap-x-16 xxl:gap-x-48">
-          <div>
-            <div className="lg:sticky lg:top-24">
-              <Accordion
-                type="single"
-                defaultValue="aside-menu"
-                className="lg:block"
-                collapsible={true}
-              >
-                <AccordionItem value="aside-menu" className="border-none">
-                  <AccordionTrigger className="flex cursor-pointer items-center justify-between gap-3 border border-border-primary px-4 py-3 lg:pointer-events-none lg:cursor-auto lg:border-none lg:p-0 [&_svg]:size-4 [&_svg]:lg:hidden">
-                    <h3 className="text-lg leading-[1.4] font-bold md:text-2xl">
-                      Tabla de contenido
-                    </h3>
-                  </AccordionTrigger>
-                  <AccordionContent className="pb-0">
-                    <div className="mt-3 md:mt-4">
-                      <a
-                        href="#heading-2"
-                        className="block px-4 py-3 md:text-md"
-                        style={{ marginLeft: 0 }}
-                      >
-                        Heading 2
-                      </a>
-                      <a
-                        href="#heading-3"
-                        className="block px-4 py-3 md:text-md"
-                        style={{ marginLeft: "16px" }}
-                      >
-                        Heading 3
-                      </a>
-                      <a
-                        href="#heading-4"
-                        className="block px-4 py-3 md:text-md"
-                        style={{ marginLeft: "32px" }}
-                      >
-                        Heading 4
-                      </a>
-                      <a
-                        href="#heading-5"
-                        className="block px-4 py-3 md:text-md"
-                        style={{ marginLeft: "48px" }}
-                      >
-                        Heading 5
-                      </a>
-                      <a
-                        href="#heading-6"
-                        className="block px-4 py-3 md:text-md"
-                        style={{ marginLeft: "64px" }}
-                      >
-                        Heading 6
-                      </a>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          </div>
-          <div className="max-w-lg">
-            <div className="md:prose-md prose lg:prose-lg">
-              <Fragment>
-                <h2 id="heading-2">Heading 2</h2>
-                <p>
-                  <strong>
-                    Dolor enim eu tortor urna sed duis nulla. Aliquam
-                    vestibulum, nulla odio nisl vitae. In aliquet pellentesque
-                    aenean hac vestibulum turpis mi bibendum diam. Tempor
-                    integer aliquam in vitae malesuada fringilla.
-                  </strong>
-                </p>
-                <p>
-                  Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam
-                  suspendisse morbi eleifend faucibus eget vestibulum felis.
-                  Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam.
-                  Mauris posuere vulputate arcu amet, vitae nisi, tellus
-                  tincidunt. At feugiat sapien varius id.
-                </p>
-                <h3 id="heading-3">Heading 3</h3>
-                <p>
-                  Eget quis mi enim, leo lacinia pharetra, semper. Eget in
-                  volutpat mollis at volutpat lectus velit, sed auctor.
-                  Porttitor fames arcu quis fusce augue enim. Quis at habitant
-                  diam at. Suscipit tristique risus, at donec. In turpis vel et
-                  quam imperdiet. Ipsum molestie aliquet sodales id est ac
-                  volutpat.
-                </p>
-                <p>
-                  Tristique odio senectus nam posuere ornare leo metus,
-                  ultricies. Blandit duis ultricies vulputate morbi feugiat cras
-                  placerat elit. Aliquam tellus lorem sed ac. Montes, sed mattis
-                  pellentesque suscipit accumsan. Cursus viverra aenean magna
-                  risus elementum faucibus molestie pellentesque. Arcu ultricies
-                  sed mauris vestibulum.
-                </p>
-                <h4 id="heading-4">Heading 4</h4>
-                <p>
-                  Morbi sed imperdiet in ipsum, adipiscing elit dui lectus.
-                  Tellus id scelerisque est ultricies ultricies. Duis est sit
-                  sed leo nisl, blandit elit sagittis. Quisque tristique
-                  consequat quam sed. Nisl at scelerisque amet nulla purus
-                  habitasse.
-                </p>
-                <figure>
-                  <img
-                    src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
-                    alt="Relume placeholder image"
-                  />
-                  <figcaption>Image caption goes here</figcaption>
-                </figure>
-                <h5 id="heading-5">Heading 5</h5>
-                <p>
-                  Morbi sed imperdiet in ipsum, adipiscing elit dui lectus.
-                  Tellus id scelerisque est ultricies ultricies. Duis est sit
-                  sed leo nisl, blandit elit sagittis. Quisque tristique
-                  consequat quam sed. Nisl at scelerisque amet nulla purus
-                  habitasse.
-                </p>
-                <blockquote>
-                  "Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim
-                  mauris id. Non pellentesque congue eget consectetur turpis.
-                  Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt
-                  aenean tempus."
-                </blockquote>
-                <h6 id="heading-5">Heading 6</h6>
-                <p>
-                  Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas
-                  condimentum mi massa. In tincidunt pharetra consectetur sed
-                  duis facilisis metus. Etiam egestas in nec sed et. Quis
-                  lobortis at sit dictum eget nibh tortor commodo cursus.
-                </p>
-              </Fragment>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className="blog-content container mx-auto px-4 py-8 max-w-3xl">
+      {content && documentToReactComponents(content, options)}
+    </div>
   );
 }

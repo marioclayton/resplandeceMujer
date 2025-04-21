@@ -8,86 +8,51 @@ import {
   BreadcrumbSeparator,
 } from "@relume_io/relume-ui";
 import React from "react";
-import {
-  BiLinkAlt,
-  BiLogoFacebookCircle,
-  BiLogoLinkedinSquare,
-} from "react-icons/bi";
-import { FaXTwitter } from "react-icons/fa6";
+import Image from "next/image";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { format } from "date-fns";
 
-export function BlogPostHeader3() {
+export function BlogPostHeader3({ post }) {
+  const { title, publishDate, author, featuredImage } = post.fields;
+
+  // Format the date if it exists
+  const formattedDate = publishDate ? format(new Date(publishDate), "MMMM dd, yyyy") : null;
+
   return (
-    <section id="relume" className="px-[5%] py-16 md:py-24 lg:py-28">
-      <div className="container">
-        <div className="grid gap-x-20 gap-y-12 md:grid-cols-[.75fr_1fr]">
-          <div className="mx-auto flex size-full max-w-lg flex-col items-start justify-start">
-            <Breadcrumb className="mb-6 flex w-full items-center md:mb-8">
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Blog</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Fe</BreadcrumbLink>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            <h1 className="mb-8 text-5xl font-bold md:mb-10 md:text-7xl lg:mb-12 lg:text-8xl">
-              La fuerza de la fe en tiempos difíciles
-            </h1>
-            <div className="flex size-full flex-col items-start justify-start">
-              <div className="rb-4 mb-6 flex items-center md:mb-8">
-                <div>
-                  <h6 className="font-semibold">
-                    <span className="font-normal">Por</span> Ana Pérez
-                  </h6>
-                  <div className="mt-1 flex">
-                    <p className="text-sm">11 Ene 2022</p>
-                    <span className="mx-2">•</span>
-                    <p className="text-sm">5 min lectura</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <p className="text-base font-semibold">Comparte este post</p>
-                <div className="rt-4 mt-3 grid grid-flow-col grid-cols-[max-content] items-start gap-2 md:mt-4">
-                  <a
-                    href="#"
-                    className="rounded-[1.25rem] bg-background-secondary p-1"
-                  >
-                    <BiLinkAlt className="size-6" />
-                  </a>
-                  <a
-                    href="#"
-                    className="rounded-[1.25rem] bg-background-secondary p-1"
-                  >
-                    <BiLogoLinkedinSquare className="size-6" />
-                  </a>
-                  <a
-                    href="#"
-                    className="rounded-[1.25rem] bg-background-secondary p-1"
-                  >
-                    <FaXTwitter className="size-6 p-0.5" />
-                  </a>
-                  <a
-                    href="#"
-                    className="rounded-[1.25rem] bg-background-secondary p-1"
-                  >
-                    <BiLogoFacebookCircle className="size-6" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mx-auto w-full overflow-hidden">
-            <img
-              src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
-              className="aspect-[3/2] size-full rounded-image object-cover"
-              alt="Relume placeholder image"
+    <div className="blog-header container mx-auto px-4 py-16">
+      <h1 className="text-4xl md:text-5xl font-bold mb-6">{title}</h1>
+
+      {/* Author and date info */}
+      <div className="flex items-center mb-8">
+        {author && author.fields && author.fields.image && (
+          <div className="mr-4">
+            <Image
+              src={`https:${author.fields.image.fields.file.url}`}
+              alt={author.fields.name || "Author"}
+              width={50}
+              height={50}
+              className="rounded-full"
             />
           </div>
+        )}
+        <div>
+          {author && <p className="font-medium">{author.fields?.name}</p>}
+          {formattedDate && <p className="text-gray-600">{formattedDate}</p>}
         </div>
       </div>
-    </section>
+
+      {/* Featured Image */}
+      {featuredImage && (
+        <div className="mb-10">
+          <Image
+            src={`https:${featuredImage.fields.file.url}`}
+            alt={featuredImage.fields.title || title}
+            width={1200}
+            height={600}
+            className="rounded-xl w-full h-auto"
+          />
+        </div>
+      )}
+    </div>
   );
 }
