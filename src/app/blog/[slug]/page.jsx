@@ -11,6 +11,35 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
 });
 
+// Debug function to check content types
+async function debugContentful() {
+  try {
+    // List all content types to verify
+    const contentTypes = await client.getContentTypes();
+    console.log('Available content types:', contentTypes.items.map(type => type.name));
+    
+    // Check for any blog posts
+    const entries = await client.getEntries({
+      content_type: 'blogPost',
+      limit: 5,
+    });
+    
+    console.log('Found blog posts:', entries.total);
+    if (entries.items.length > 0) {
+      console.log('Sample blog post fields:', Object.keys(entries.items[0].fields));
+      console.log('First blog post:', {
+        id: entries.items[0].sys.id,
+        title: entries.items[0].fields.title,
+        slug: entries.items[0].fields.blogSlug || '[No blogSlug field]'
+      });
+    }
+    return entries.items.length > 0;
+  } catch (error) {
+    console.error('Contentful debug error:', error);
+    return false;
+  }
+}
+
 // Fetch blog post data
 async function getBlogPost(slug) {
   if (!slug) {
@@ -18,12 +47,66 @@ async function getBlogPost(slug) {
     return null;
   }
 
+  // Decode the URL-encoded slug (e.g., convert "C%C3%B3mo" to "Cómo")
+  const decodedSlug = decodeURIComponent(slug);
+  console.log(`Original slug: "${slug}", Decoded slug: "${decodedSlug}"`);
+  
   try {
-    const response = await client.getEntries({
+    // Try with the decoded slug first
+    console.log(`Attempting to fetch blog post with decoded slug: "${decodedSlug}"`);
+    let response = await client.getEntries({
       content_type: 'blogPost',
-      'fields.blogSlug': slug,
+      'fields.blogSlug': decodedSlug,
       limit: 1,
     });
+    
+    console.log(`Query results with decoded slug: found ${response.total} entries`);
+    
+    // If no results with decoded slug, try with original (encoded) slug
+    if (response.total === 0) {
+      console.log(`Trying with original slug: "${slug}"`);
+      response = await client.getEntries({
+        content_type: 'blogPost',
+        'fields.blogSlug': slug,
+        limit: 1,
+      });
+      console.log(`Query results with original slug: found ${response.total} entries`);
+    }
+    
+    // If still no results, try fetching all and manually searching
+    if (response.total === 0) {
+      console.log('No exact matches found, fetching all posts to search manually');
+      const allPosts = await client.getEntries({
+        content_type: 'blogPost',
+        limit: 100,
+      });
+      
+      console.log(`Fetched ${allPosts.total} total posts to search through`);
+      
+      // Log the first few posts' slugs to debug
+      if (allPosts.items.length > 0) {
+        console.log('Available slugs:');
+        allPosts.items.slice(0, 5).forEach(item => {
+          console.log(`- ID: ${item.sys.id}, Title: ${item.fields.title}, Slug: ${item.fields.blogSlug || 'N/A'}`);
+        });
+      }
+      
+      // Search with multiple variations and case insensitivity
+      const matchingPost = allPosts.items.find(item => {
+        const itemSlug = item.fields.blogSlug;
+        if (!itemSlug) return false;
+        
+        return itemSlug.toLowerCase() === decodedSlug.toLowerCase() || 
+               itemSlug.toLowerCase() === slug.toLowerCase() ||
+               decodedSlug.toLowerCase().includes(itemSlug.toLowerCase()) ||
+               itemSlug.toLowerCase().includes(decodedSlug.toLowerCase());
+      });
+      
+      if (matchingPost) {
+        console.log(`Found matching post: "${matchingPost.fields.title}" with slug: "${matchingPost.fields.blogSlug}"`);
+        return matchingPost;
+      }
+    }
 
     return response.items[0] || null;
   } catch (error) {
@@ -32,25 +115,35 @@ async function getBlogPost(slug) {
   }
 }
 
+// Fetch related posts from server component
+async function getRelatedPosts(currentPost) {
+  try {
+    if (!currentPost) return [];
+    
+    const currentId = currentPost.sys.id;
+    // Try to match by any common tags or categories if available
+    const currentTags = currentPost.fields.tags || [];
+    
+    // Fetch related posts (excluding current)
+    const response = await client.getEntries({
+      content_type: 'blogPost',
+      limit: 3,
+      'sys.id[ne]': currentId, // Exclude current post
+    });
+    
+    return response.items || [];
+  } catch (error) {
+    console.error('Error fetching related posts:', error);
+    return [];
+  }
+}
+
 // Generate metadata for the page
 export async function generateMetadata({ params }) {
-  // Validate params object
-  if (!params || typeof params !== 'object') {
-    console.error('Invalid params object received', params);
-    return {
-      title: 'Blog Post Not Found',
-      description: 'The requested blog post could not be found.',
-    };
-  }
-
-  // Access slug directly instead of destructuring
-  const slug = params.slug;
-  
-  // Debug log to see what's actually in params
-  console.log('Params in generateMetadata:', params);
+  const slug = params?.slug;
+  console.log('Generating metadata for slug:', slug);
   
   if (!slug) {
-    console.error('No slug found in params', params);
     return {
       title: 'Blog Post Not Found',
       description: 'The requested blog post could not be found.',
@@ -74,10 +167,7 @@ export async function generateMetadata({ params }) {
 
 // Page component
 export default async function Page({ params }) {
-  // Debug log to see what's in params
-  console.log('Params in Page component:', params);
-  
-  // Access slug directly
+  console.log('Rendering page for params:', params);
   const slug = params?.slug;
   
   if (!slug) {
@@ -88,15 +178,21 @@ export default async function Page({ params }) {
   const blogPost = await getBlogPost(slug);
 
   if (!blogPost) {
+    console.error(`Blog post not found for slug: ${slug}`);
     notFound();
   }
 
+  // Fetch related posts on the server
+  const relatedPosts = await getRelatedPosts(blogPost);
+
+  console.log('Successfully found blog post:', blogPost.fields.title);
+  
   return (
     <div>
       <BlogPostHeader3 post={blogPost} />
       <Content27 post={blogPost} />
       <Testimonial5 post={blogPost} />
-      <Blog46 post={blogPost} />
+      <Blog46 relatedPosts={relatedPosts} />
     </div>
   );
 }
@@ -104,21 +200,28 @@ export default async function Page({ params }) {
 // Generate static paths
 export async function generateStaticParams() {
   try {
+    console.log('Generating static paths for blog posts...');
     const response = await client.getEntries({ 
       content_type: 'blogPost',
       limit: 100,
     });
 
-    return response.items.map((post) => {
-      // Add error handling for missing blogSlug field
-      if (!post.fields.blogSlug) {
-        console.warn('Blog post missing blogSlug field:', post.sys.id);
+    console.log(`Found ${response.total} blog posts for static generation`);
+    
+    const paths = response.items.map((post) => {
+      // Check for the blog slug field
+      const slug = post.fields.blogSlug;
+      
+      if (!slug) {
+        console.warn(`Blog post missing blogSlug field: ${post.sys.id}, title: ${post.fields.title}`);
         return null;
       }
-      return {
-        slug: post.fields.blogSlug,
-      };
-    }).filter(Boolean); // Filter out null values
+      
+      return { slug };
+    }).filter(Boolean);
+    
+    console.log('Generated paths:', paths);
+    return paths;
   } catch (error) {
     console.error('Error generating static paths:', error);
     return [];

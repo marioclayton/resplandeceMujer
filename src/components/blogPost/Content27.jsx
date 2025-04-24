@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export function Content27({ post }) {
-  const { content } = post.fields;
+  const { blogContent } = post.fields;
   
   // Configure the rich text renderer options
   const options = {
@@ -53,7 +53,7 @@ export function Content27({ post }) {
 
   return (
     <div className="blog-content container mx-auto px-4 py-8 max-w-3xl">
-      {content && documentToReactComponents(content, options)}
+      {blogContent && documentToReactComponents(blogContent, options)}
     </div>
   );
 }

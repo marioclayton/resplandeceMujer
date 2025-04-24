@@ -5,31 +5,20 @@ import React from "react";
 import { RxChevronRight } from "react-icons/rx";
 import Image from 'next/image';
 import Link from 'next/link';
-import { createClient } from 'contentful';
 
-// Initialize Contentful client for fetching related posts
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-});
+export function Blog46({ relatedPosts }) {
+  // If no related posts provided, don't render the component
+  if (!relatedPosts || relatedPosts.length === 0) {
+    console.log("No related posts available");
+    return null;
+  }
 
-export async function Blog46({ post }) {
-  // Get the current post's categories or tags for finding related posts
-  const currentTags = post.fields.tags || [];
-  const currentId = post.sys.id;
+  console.log("Related posts available:", relatedPosts.length);
   
-  // Fetch related posts
-  const response = await client.getEntries({
-    content_type: 'blogPost',
-    limit: 3,
-    'sys.id[ne]': currentId, // Exclude current post
-    // You could add filter by tags here if needed
-  });
-  
-  const relatedPosts = response.items;
-  
-  // If no related posts, don't render the component
-  if (!relatedPosts.length) return null;
+  // Debug - log the first related post structure
+  if (relatedPosts.length > 0) {
+    console.log("First related post fields:", Object.keys(relatedPosts[0].fields));
+  }
 
   return (
     <div className="bg-white py-16">
@@ -44,11 +33,11 @@ export async function Blog46({ post }) {
               className="group"
             >
               <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                {relatedPost.fields.featuredImage && (
+                {relatedPost.fields.blogImage && (
                   <div className="relative h-48 overflow-hidden">
                     <Image
-                      src={`https:${relatedPost.fields.featuredImage.fields.file.url}`}
-                      alt={relatedPost.fields.title}
+                      src={`https:${relatedPost.fields.blogImage.fields.file.url}`}
+                      alt={relatedPost.fields.blogTitle || "Blog post"}
                       fill
                       className="object-cover transition-transform group-hover:scale-105"
                     />
@@ -57,17 +46,22 @@ export async function Blog46({ post }) {
                 
                 <div className="p-5">
                   <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600">
-                    {relatedPost.fields.title}
+                    {relatedPost.fields.blogTitle}
                   </h3>
                   
-                  {relatedPost.fields.excerpt && (
+                  {relatedPost.fields.blogExcerpt && (
                     <p className="text-gray-600 line-clamp-2">
-                      {relatedPost.fields.excerpt}
+                      {relatedPost.fields.blogExcerpt}
                     </p>
                   )}
                   
                   <div className="mt-4 flex justify-between items-center">
                     <span className="text-blue-600 font-medium">Read more</span>
+                    {relatedPost.fields.blogCategories && (
+                      <Badge variant="subtle" color="gray">
+                        {relatedPost.fields.blogCategories}
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </div>
