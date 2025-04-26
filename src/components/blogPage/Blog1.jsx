@@ -25,7 +25,7 @@ export function Blog1({ initialPosts = [] }) {
       : posts.filter((post) => post.fields.blogCategories === activeCategory);
 
   return (
-    <section id="relume" className="px-[5%] py-16 md:py-24 lg:py-28">
+    <section id="relume" className="darkBG px-[5%] py-16 md:py-24 lg:py-28">
       <div className="container">
         <div className="md:mb-18 mb-12 lg:mb-20">
           <div className="mx-auto w-full max-w-lg text-center">
@@ -81,7 +81,7 @@ export function Blog1({ initialPosts = [] }) {
             <div className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2 md:gap-y-16 lg:grid-cols-3">
               {filteredPosts.length > 0 ? (
                 filteredPosts.map((post) => (
-                  <div key={post.sys.id}>
+                  <div className="border border-border-primary rounded-4xl" key={post.sys.id}>
                     <Link
                       href={`/blog/${post.fields.blogSlug}`}
                       className="mb-6 inline-block w-full max-w-full"
@@ -90,10 +90,11 @@ export function Blog1({ initialPosts = [] }) {
                         <img
                           src={post.fields.blogImage.fields.file.url}
                           alt={post.fields.blogTitle}
-                          className="rounded-image aspect-[3/2] size-full object-cover"
+                          className="rounded-image rounded-t-4xl aspect-[3/2] size-full object-cover"
                         />
                       </div>
                     </Link>
+                    <div className="px-4 pb-4">
                     <Link
                       href={`/blog/category/${post.fields.blogCategories}`}
                       className="mb-2 mr-4 inline-block max-w-full text-sm font-semibold"
@@ -122,6 +123,7 @@ export function Blog1({ initialPosts = [] }) {
                           <p className="text-sm">5 min lectura</p>
                         </div>
                       </div>
+                    </div>
                     </div>
                   </div>
                 ))

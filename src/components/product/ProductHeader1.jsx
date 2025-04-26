@@ -11,9 +11,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
   Button,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
   Input,
   Label,
   Select,
@@ -23,8 +20,7 @@ import {
   SelectValue,
 } from "@relume_io/relume-ui";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import React, { Fragment, useEffect, useState } from "react";
-import clsx from "clsx";
+import React, { Fragment } from "react";
 import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
 
 const Star = ({ rating }) => {
@@ -52,37 +48,7 @@ const Star = ({ rating }) => {
   );
 };
 
-const useCarousel = () => {
-  const [mainApi, setMainApi] = useState();
-  const [thumbApi, setThumbApi] = useState();
-  const [current, setCurrent] = useState(0);
-  useEffect(() => {
-    if (!mainApi || !thumbApi) {
-      return;
-    }
-    mainApi.on("select", () => {
-      const index = mainApi.selectedScrollSnap();
-      setCurrent(index);
-      thumbApi.scrollTo(index);
-    });
-  }, [mainApi, thumbApi]);
-  const handleClick = (index) => () => {
-    return mainApi?.scrollTo(index);
-  };
-  const getThumbStyles = (index) => {
-    return clsx("block", current === index && "opacity-60");
-  };
-  return {
-    setMainApi,
-    setThumbApi,
-    handleClick,
-    getThumbStyles,
-  };
-};
-
 export function ProductHeader1({ product }) {
-  const useActive = useCarousel();
-
   if (!product) return null;
 
   const {
@@ -95,7 +61,7 @@ export function ProductHeader1({ product }) {
   } = product.fields;
 
   return (
-    <header id="relume" className="px-[5%] py-12 md:py-16 lg:py-20">
+    <header id="relume" className="darkBG px-[5%] py-12 md:py-16 lg:py-20">
       <div className="container">
         <Breadcrumb className="mb-6 flex flex-wrap items-center text-sm">
           <BreadcrumbList>
@@ -120,56 +86,15 @@ export function ProductHeader1({ product }) {
             </Fragment>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="grid grid-cols-1 gap-y-8 md:gap-y-10 lg:grid-cols-[1.25fr_1fr] lg:gap-x-20">
-          <div className="grid grid-cols-1 md:grid-cols-[5rem_1fr] md:gap-x-4">
-            <div className="relative hidden h-full md:block">
-              <div className="absolute top-0 bottom-0 max-h-full overflow-y-auto">
-                <Carousel
-                  setApi={useActive.setThumbApi}
-                  orientation="vertical"
-                  opts={{
-                    align: "start",
-                    containScroll: "keepSnaps",
-                    dragFree: true,
-                  }}
-                  className="m-0"
-                >
-                  <CarouselContent className="m-0 gap-y-4">
-                    <CarouselItem className="p-0">
-                      <button
-                        onClick={useActive.handleClick(0)}
-                        className={useActive.getThumbStyles(0)}
-                      >
-                        <img
-                          src={productImage.fields.file.url}
-                          alt={productName}
-                          className="aspect-[5/6] size-full object-cover"
-                        />
-                      </button>
-                    </CarouselItem>
-                  </CarouselContent>
-                </Carousel>
-              </div>
-            </div>
-            <div className="overflow-hidden">
-              <Carousel
-                setApi={useActive.setMainApi}
-                opts={{ loop: true, align: "start" }}
-                className="m-0"
-              >
-                <CarouselContent className="m-0">
-                  <CarouselItem className="basis-full pl-0">
-                    <button>
-                      <img
-                        src={productImage.fields.file.url}
-                        alt={productName}
-                        className="aspect-[5/6] size-full object-cover"
-                      />
-                    </button>
-                  </CarouselItem>
-                </CarouselContent>
-              </Carousel>
-            </div>
+        {/* Changed grid ratio to give less space to image */}
+        <div className="grid grid-cols-1 gap-y-8 md:gap-y-10 lg:grid-cols-[1fr_1.5fr] lg:gap-x-20">
+          {/* Product image container with top alignment */}
+          <div className="flex justify-center items-start overflow-hidden pt-1">
+            <img
+              src={productImage.fields.file.url}
+              alt={productName}
+              className="aspect-[5/6] max-w-full max-h-[500px] object-contain rounded-lg"
+            />
           </div>
           <div>
             <h1 className="mb-2 text-4xl leading-[1.2] font-bold md:text-5xl lg:text-6xl">

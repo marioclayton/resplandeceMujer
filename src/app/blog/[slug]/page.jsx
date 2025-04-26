@@ -188,7 +188,7 @@ export default async function Page({ params }) {
   console.log('Successfully found blog post:', blogPost.fields.title);
   
   return (
-    <div>
+    <div className='darkBG'>
       <BlogPostHeader3 post={blogPost} />
       <Content27 post={blogPost} />
       <Testimonial5 post={blogPost} />

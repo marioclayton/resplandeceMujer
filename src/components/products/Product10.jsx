@@ -59,14 +59,7 @@ const Product10 = ({ products }) => {
         </div>
         <div className="mt-10 flex justify-center md:mt-14 lg:mt-16">
           <Link href="/products">
-            <Button
-              variant="secondary"
-              size="primary"
-              title="Ver todos"
-              className="bg-[#0a0a0a] text-white hover:bg-[#333] transition-colors duration-300 rounded-lg"
-            >
-              Ver todos
-            </Button>
+            
           </Link>
         </div>
       </div>
