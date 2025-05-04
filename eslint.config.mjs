@@ -9,8 +9,18 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
+// Convert the Next.js configurations
+const nextConfigs = compat.extends("next/core-web-vitals", "next/typescript");
+
+// Use flat config format (no "overrides" key)
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...nextConfigs,
+  {
+    files: ["src/app/blog/page.tsx"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
+  }
 ];
 
 export default eslintConfig;

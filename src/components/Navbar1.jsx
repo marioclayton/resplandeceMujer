@@ -126,7 +126,7 @@ export function Navbar1() {
             Productos
           </a>
           <a
-            href="contact"
+            href="/contact"
             className="block py-3 text-md lg:px-4 lg:py-2 lg:text-base"
           >
             Contacto

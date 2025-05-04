@@ -2,6 +2,7 @@
 
 import { Button } from "@relume_io/relume-ui";
 import React from "react";
+import Link from "next/link"; // Add this import
 import { RxChevronRight } from "react-icons/rx";
 
 export function Layout4() {
@@ -40,15 +41,19 @@ export function Layout4() {
               </div>
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
-              <Button title="Únete" variant="secondary" className="secondaryButton">
-                Únete
-              </Button>
-              <Button
-                className="secondaryButton"
-                title="Descubre"
-              >
-                Descubre
-              </Button>
+              <Link href="/blog">
+                <Button title="Blog" variant="secondary" className="secondaryButton">
+                  Blog
+                </Button>
+              </Link>
+              <Link href="/products">
+                <Button
+                  className="secondaryButton"
+                  title="Productos"
+                >
+                  Productos
+                </Button>
+              </Link>
             </div>
           </div>
           <div>

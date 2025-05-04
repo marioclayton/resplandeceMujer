@@ -2,6 +2,7 @@
 
 import { Button } from "@relume_io/relume-ui";
 import React from "react";
+import Link from "next/link"; // Add this import
 
 export function Header5() {
   return (
@@ -21,10 +22,14 @@ export function Header5() {
               equilibrada.
             </p>
             <div className="mt-6 flex flex-wrap gap-4 md:mt-8">
-              <Button className="primaryButton" title="Descubre">Descubre</Button>
-              <Button className="secondaryButton"title="Únete" variant="secondary-alt">
-                Únete
-              </Button>
+              <Link href="/blog">
+                <Button className="primaryButton" title="Descubre">Blog</Button>
+              </Link>
+              <Link href="/products">
+                <Button className="secondaryButton" title="Únete" variant="secondary-alt">
+                  Productos
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
