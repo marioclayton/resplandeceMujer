@@ -202,7 +202,8 @@ export function Layout369() {
           {/* Highest Rated Product Card */}
           {highestRatedProduct && (
             <div className="flex flex-col h-full border border-border-primary rounded-4xl overflow-hidden">
-              <div className="flex flex-col justify-center p-6">
+              {/* Content section - add flex-1 to make it expand and push image down */}
+              <div className="flex flex-col justify-center p-6 flex-1">
                 <div>
                   <p className="mb-2 text-sm font-semibold">Producto Destacado</p>
                   <h3 className="mb-2 text-xl font-bold md:text-2xl">
@@ -225,8 +226,9 @@ export function Layout369() {
                   </Link>
                 </div>
               </div>
+              {/* Image container - will now be pushed to the bottom */}
               {highestRatedProduct.fields.productImage && (
-                <div className="h-56 md:h-64">
+                <div className="h-56 md:h-64 mt-auto">
                   <img
                     src={highestRatedProduct.fields.productImage.fields.file.url}
                     alt={highestRatedProduct.fields.productName}
