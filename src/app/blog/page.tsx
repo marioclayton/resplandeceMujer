@@ -10,14 +10,37 @@ const client = createClient({
 });
 
 // Server-side data fetching
-async function getBlogPosts() {
+async function getBlogPosts(sortOrder = 'desc') {
   try {
+    // The minus sign (-) before the field name means descending order
+    // Remove it for ascending order
+    const orderPrefix = sortOrder === 'desc' ? '-' : '';
+    
     const response = await client.getEntries({
       content_type: "blogPost",
-      order: "-fields.blogPublishDate",
+      order: `${orderPrefix}fields.blogPublishDate`,
+      // Add this to ensure we get the full entries
+      include: 10
     });
     
-    return response.items;
+    // Double-check the sorting with JavaScript as well
+    const posts = response.items;
+    
+    // Fallback sorting if Contentful's sorting doesn't work correctly
+    if (posts && posts.length > 0) {
+      posts.sort((a, b) => {
+        const dateA = new Date(a.fields.blogPublishDate);
+        const dateB = new Date(b.fields.blogPublishDate);
+        
+        // For desc: return dateB - dateA
+        // For asc: return dateA - dateB
+        return sortOrder === 'desc' ? 
+          (dateB.getTime() - dateA.getTime()) : 
+          (dateA.getTime() - dateB.getTime());
+      });
+    }
+    
+    return posts;
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     return [];
@@ -26,7 +49,8 @@ async function getBlogPosts() {
 
 export default async function Page() {
   // Fetch blog posts on the server
-  const posts = await getBlogPosts();
+  // You can change 'desc' to 'asc' if you want oldest first
+  const posts = await getBlogPosts('desc');
 
   return (
     <div>

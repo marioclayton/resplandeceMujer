@@ -1,71 +1,75 @@
 "use client";
 
-import { Badge, Button } from "@relume_io/relume-ui";
 import React from "react";
-import { RxChevronRight } from "react-icons/rx";
 import Image from 'next/image';
 import Link from 'next/link';
 
 export function Blog46({ relatedPosts }) {
   // If no related posts provided, don't render the component
   if (!relatedPosts || relatedPosts.length === 0) {
-    console.log("No related posts available");
     return null;
   }
 
-  console.log("Related posts available:", relatedPosts.length);
-  
-  // Debug - log the first related post structure
-  if (relatedPosts.length > 0) {
-    console.log("First related post fields:", Object.keys(relatedPosts[0].fields));
-  }
-
   return (
-    <div className="bg-white py-16">
+    <div className="darkBG py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-10 text-center">Related Posts</h2>
+        <h2 className="text-3xl font-bold mb-10 text-center">Artículos Relacionados</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
           {relatedPosts.map((relatedPost) => (
-            <Link 
-              href={`/blog/${relatedPost.fields.blogSlug}`} 
-              key={relatedPost.sys.id}
-              className="group"
-            >
-              <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                {relatedPost.fields.blogImage && (
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
+            <div className="border border-border-primary rounded-4xl" key={relatedPost.sys.id}>
+              <Link 
+                href={`/blog/${relatedPost.fields.blogSlug}`}
+                className="mb-6 inline-block w-full max-w-full"
+              >
+                <div className="w-full overflow-hidden">
+                  {relatedPost.fields.blogImage && (
+                    <img
                       src={`https:${relatedPost.fields.blogImage.fields.file.url}`}
                       alt={relatedPost.fields.blogTitle || "Blog post"}
-                      fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="rounded-image rounded-t-4xl aspect-[3/2] size-full object-cover"
                     />
-                  </div>
+                  )}
+                </div>
+              </Link>
+              
+              <div className="px-4 pb-4">
+                <Link
+                  href={`/blog/category/${relatedPost.fields.blogCategories}`}
+                  className="mb-2 mr-4 inline-block max-w-full text-sm font-semibold"
+                >
+                  {relatedPost.fields.blogCategories}
+                </Link>
+                
+                <Link
+                  href={`/blog/${relatedPost.fields.blogSlug}`}
+                  className="mb-2 block max-w-full"
+                >
+                  <h5 className="text-xl font-bold md:text-2xl">
+                    {relatedPost.fields.blogTitle}
+                  </h5>
+                </Link>
+                
+                {relatedPost.fields.blogExcerpt && (
+                  <p>{relatedPost.fields.blogExcerpt}</p>
                 )}
                 
-                <div className="p-5">
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600">
-                    {relatedPost.fields.blogTitle}
-                  </h3>
-                  
-                  {relatedPost.fields.blogExcerpt && (
-                    <p className="text-gray-600 line-clamp-2">
-                      {relatedPost.fields.blogExcerpt}
-                    </p>
-                  )}
-                  
-                  <div className="mt-4 flex justify-between items-center">
-                    <span className="text-blue-600 font-medium">Read more</span>
-                    {relatedPost.fields.blogCategories && (
-                      <Badge variant="subtle" color="gray">
-                        {relatedPost.fields.blogCategories}
-                      </Badge>
-                    )}
+                <div className="mt-6 flex items-center">
+                  <div>
+                    <h6 className="text-sm font-semibold">
+                      {relatedPost.fields.blogAuthor}
+                    </h6>
+                    <div className="flex items-center">
+                      <p className="text-sm">
+                        {relatedPost.fields.blogPublishDate}
+                      </p>
+                      <span className="mx-2">•</span>
+                      <p className="text-sm">5 min lectura</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

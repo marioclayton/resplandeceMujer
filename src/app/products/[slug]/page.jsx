@@ -1,5 +1,6 @@
 import { createClient } from 'contentful';
 import { ProductHeader1 } from '@/components/product/ProductHeader1';
+import { ProductReviews } from "@/components/product/ProductReviews";
 import { notFound } from 'next/navigation';
 
 // Initialize Contentful client
@@ -52,6 +53,7 @@ export default async function ProductPage({ params }) {
   return (
     <main>
       <ProductHeader1 product={product} />
+      <ProductReviews productId={product.sys.id} />
     </main>
   );
 }

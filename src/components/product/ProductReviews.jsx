@@ -8,93 +8,85 @@ import { createClient as createDeliveryClient } from 'contentful';
 const CONTENTFUL_SPACE_ID = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
 const CONTENTFUL_ACCESS_TOKEN = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
 
-export function Testimonial5({ postSlug }) {
-  const [testimonials, setTestimonials] = useState([]);
+export function ProductReviews({ productId }) {
+  const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [refreshFlag, setRefreshFlag] = useState(0); // Add this for manual refresh
+  const [refreshFlag, setRefreshFlag] = useState(0);
   
   // Form state
   const [name, setName] = useState("");
-  const [comment, setComment] = useState("");
+  const [review, setReview] = useState("");
   const [rating, setRating] = useState(5);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  // Fetch existing testimonials from Contentful
+  // Fetch existing reviews from Contentful
   useEffect(() => {
-    async function fetchTestimonials() {
+    async function fetchReviews() {
       try {
         setIsLoading(true);
-        setError(null);
         
-        // Try Contentful if credentials are available
         if (CONTENTFUL_SPACE_ID && CONTENTFUL_ACCESS_TOKEN) {
-          console.log('Fetching testimonials for:', postSlug);
-          
           const deliveryClient = createDeliveryClient({
             space: CONTENTFUL_SPACE_ID,
             accessToken: CONTENTFUL_ACCESS_TOKEN,
           });
           
           const entries = await deliveryClient.getEntries({
-            content_type: 'comment',
-            'fields.postSlug': postSlug,
+            content_type: 'productReview',
+            'fields.productId': productId,
             'fields.isApproved': true,
             order: '-fields.date'
           });
           
-          console.log('Retrieved entries:', entries);
-          
           if (entries && entries.items && entries.items.length > 0) {
-            const contentfulComments = entries.items.map(item => {
-              if (!item.fields) {
-                console.warn('Missing fields in item:', item);
-                return null;
-              }
-              
-              return {
-                id: item.sys?.id,
+            const contentfulReviews = entries.items
+              .filter(item => item.fields)
+              .map(item => ({
+                id: item.sys.id,
                 name: item.fields.name,
-                comment: item.fields.comment,
+                review: item.fields.review,
                 rating: item.fields.rating || 5,
                 date: item.fields.date,
                 avatar: item.fields.avatar?.fields?.file?.url || null
-              };
-            }).filter(Boolean); // Remove any null entries
+              }));
             
-            console.log('Processed comments:', contentfulComments);
-            setTestimonials(contentfulComments);
+            setReviews(contentfulReviews);
           } else {
-            console.log('No comments found or entries structure incorrect');
-            setTestimonials([]);
+            setReviews([]);
           }
-        } else {
-          console.warn('Contentful credentials missing');
-          setTestimonials([]);
         }
       } catch (err) {
-        console.error('Error fetching testimonials:', err);
-        setError('No se pudieron cargar los comentarios desde Contentful.');
+        console.error('Error fetching reviews:', err);
+        setError('No se pudieron cargar las reseñas.');
       } finally {
         setIsLoading(false);
       }
     }
     
-    fetchTestimonials();
-  }, [postSlug, refreshFlag]); // Add refreshFlag to dependencies
+    fetchReviews();
+  }, [productId, refreshFlag]);
 
-  // Function to manually refresh comments
-  const refreshComments = () => {
+  // Calculate average rating
+  const calculateAverageRating = () => {
+    if (reviews.length === 0) return 0;
+    
+    const sum = reviews.reduce((total, review) => total + review.rating, 0);
+    return (sum / reviews.length).toFixed(1);
+  };
+  
+  // Function to manually refresh reviews
+  const refreshReviews = () => {
     setRefreshFlag(prev => prev + 1);
   };
 
-  // Handle form submission - sending only to the API
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!name || !comment === undefined) {
-      setError("Por favor completa tu nombre y comentario");
+    if (!name || !review) {
+      setError("Por favor completa tu nombre y reseña");
       return;
     }
     
@@ -103,70 +95,69 @@ export function Testimonial5({ postSlug }) {
     
     try {
       // Send to server API
-      const response = await fetch('/api/comments', {
+      const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           name,
-          comment,
+          review,
           rating,
-          postSlug
+          productId
         })
       });
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to submit comment');
+        throw new Error(errorData.error || 'Failed to submit review');
       }
       
       // Reset form
       setName('');
-      setComment('');
+      setReview('');
       setRating(5);
       setSubmitSuccess(true);
       
       // Hide success message after 5 seconds
       setTimeout(() => setSubmitSuccess(false), 5000);
     } catch (err) {
-      console.error('Error submitting comment:', err);
-      setError('No se pudo enviar tu comentario. Por favor intenta más tarde.');
+      console.error('Error submitting review:', err);
+      setError('No se pudo enviar tu reseña. Por favor intenta más tarde.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="testimonials" className="darkBG px-[5%] py-16 md:py-24 lg:py-28">
+    <section id="reviews" className="darkBG px-[5%] py-16 md:py-24 lg:py-28">
       <div className="container">
         {/* Title section */}
         <div className="mb-12 w-full md:mb-18 lg:mb-20">
           <h2 className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl">
-            Testimonios de lectoras
+            Reseñas del producto
           </h2>
           <div className="flex justify-between items-center">
             <p className="md:text-md">
-              Comparte tu experiencia sobre este artículo
+              Comparte tu experiencia con este producto
             </p>
-            {/* Add refresh button */}
             <button 
-              onClick={refreshComments}
+              onClick={refreshReviews}
               className="text-sm text-[#501E16] hover:underline"
-              aria-label="Refrescar comentarios"
+              aria-label="Refrescar reseñas"
             >
-              Refrescar comentarios
+              Refrescar reseñas
             </button>
           </div>
         </div>
         
-        {/* Comment form */}
+        {/* Review form */}
         <div className="mb-16 p-6 border border-border-primary rounded-4xl">
-          <h3 className="text-2xl font-bold mb-4">Deja tu comentario</h3>
+          <h3 className="text-2xl font-bold mb-4">Deja tu reseña</h3>
           
           {submitSuccess && (
             <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-              ¡Gracias por tu comentario! Se ha enviado correctamente y está pendiente de aprobación.
+              ¡Gracias por tu reseña! Se ha enviado correctamente y está pendiente de aprobación.
             </div>
           )}
           
@@ -214,15 +205,15 @@ export function Testimonial5({ postSlug }) {
             </div>
             
             <div className="mb-4">
-              <label htmlFor="comment" className="block mb-2 font-medium">
-                Comentario <span className="text-red-500">*</span>
+              <label htmlFor="review" className="block mb-2 font-medium">
+                Reseña <span className="text-red-500">*</span>
               </label>
               <textarea
-                id="comment"
+                id="review"
                 rows="4"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#501E16]"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
                 required
               ></textarea>
             </div>
@@ -232,55 +223,55 @@ export function Testimonial5({ postSlug }) {
               disabled={isSubmitting}
               className="px-6 py-3 bg-[#501E16] text-white rounded hover:bg-[#401810] transition-colors disabled:opacity-50"
             >
-              {isSubmitting ? "Enviando..." : "Enviar comentario"}
+              {isSubmitting ? "Enviando..." : "Enviar reseña"}
             </button>
           </form>
         </div>
         
-        {/* Display testimonials */}
+        {/* Display reviews */}
         {isLoading ? (
           <div className="flex justify-center">
-            <p>Cargando comentarios...</p>
+            <p>Cargando reseñas...</p>
           </div>
         ) : error ? (
           <div className="text-center p-8 border border-dashed border-red-300 rounded-4xl">
             <p className="text-red-600">{error}</p>
             <button 
-              onClick={refreshComments}
+              onClick={refreshReviews}
               className="mt-4 text-sm text-[#501E16] hover:underline"
             >
               Intentar nuevamente
             </button>
           </div>
-        ) : testimonials.length > 0 ? (
+        ) : reviews.length > 0 ? (
           <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-16">
-            {testimonials.map((testimonial, index) => (
-              <div key={testimonial.id || index} className="flex h-full max-w-lg flex-col items-start justify-start text-left border border-border-primary rounded-4xl p-6">
+            {reviews.map((review, index) => (
+              <div key={review.id || index} className="flex h-full max-w-lg flex-col items-start justify-start text-left border border-border-primary rounded-4xl p-6">
                 <div className="mb-6 flex md:mb-8">
                   {[...Array(5)].map((_, i) => (
                     <BiSolidStar 
                       key={i}
                       className={`size-6 ${
-                        i < testimonial.rating ? "text-yellow-500" : "text-gray-300"
+                        i < review.rating ? "text-yellow-500" : "text-gray-300"
                       }`} 
                     />
                   ))}
                 </div>
                 <blockquote className="text-md leading-[1.4] font-bold md:text-xl mb-4">
-                  "{testimonial.comment}"
+                  "{review.review}"
                 </blockquote>
                 <div className="mt-auto flex w-full flex-row items-center gap-3">
                   <div>
                     <img
-                      src={testimonial.avatar || "https://ui-avatars.com/api/?name=" + encodeURIComponent(testimonial.name)}
-                      alt={`Foto de ${testimonial.name}`}
+                      src={review.avatar || "https://ui-avatars.com/api/?name=" + encodeURIComponent(review.name)}
+                      alt={`Foto de ${review.name}`}
                       className="size-14 min-h-14 min-w-14 rounded-full object-cover"
                     />
                   </div>
                   <div>
-                    <p className="font-semibold">{testimonial.name}</p>
+                    <p className="font-semibold">{review.name}</p>
                     <p className="text-sm text-white">
-                      {new Date(testimonial.date).toLocaleDateString()}
+                      {new Date(review.date).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
@@ -289,10 +280,49 @@ export function Testimonial5({ postSlug }) {
           </div>
         ) : (
           <div className="text-center p-8 border border-dashed border-gray-300 rounded-4xl">
-            <p>No hay comentarios todavía. ¡Sé el primero en comentar!</p>
+            <p>No hay reseñas todavía. ¡Sé el primero en opinar!</p>
           </div>
         )}
       </div>
     </section>
   );
+}
+
+// Export this function to use in ProductHeader1
+export function useAverageRating(productId) {
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+  
+  useEffect(() => {
+    async function fetchReviews() {
+      if (!CONTENTFUL_SPACE_ID || !CONTENTFUL_ACCESS_TOKEN) return;
+      
+      try {
+        const deliveryClient = createDeliveryClient({
+          space: CONTENTFUL_SPACE_ID,
+          accessToken: CONTENTFUL_ACCESS_TOKEN,
+        });
+        
+        const entries = await deliveryClient.getEntries({
+          content_type: 'productReview',
+          'fields.productId': productId,
+          'fields.isApproved': true,
+        });
+        
+        if (entries && entries.items && entries.items.length > 0) {
+          const reviews = entries.items.filter(item => item.fields);
+          setReviewCount(reviews.length);
+          
+          const sum = reviews.reduce((total, item) => total + (item.fields.rating || 0), 0);
+          setAverageRating((sum / reviews.length).toFixed(1));
+        }
+      } catch (err) {
+        console.error('Error fetching review ratings:', err);
+      }
+    }
+    
+    fetchReviews();
+  }, [productId]);
+  
+  return { averageRating, reviewCount };
 }

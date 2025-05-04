@@ -191,7 +191,7 @@ export default async function Page({ params }) {
     <div className='darkBG'>
       <BlogPostHeader3 post={blogPost} />
       <Content27 post={blogPost} />
-      <Testimonial5 post={blogPost} />
+      <Testimonial5 postSlug={slug} />
       <Blog46 relatedPosts={relatedPosts} />
     </div>
   );

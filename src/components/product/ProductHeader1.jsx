@@ -5,23 +5,12 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
   Button,
-  Input,
-  Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@relume_io/relume-ui";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import React, { Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
+import { useAverageRating } from "./ProductReviews";
 
 const Star = ({ rating }) => {
   const fullStars = Math.floor(rating);
@@ -59,34 +48,16 @@ export function ProductHeader1({ product }) {
     productCategory,
     externalUrl,
   } = product.fields;
+  
+  // Get system ID for the product
+  const productId = product.sys?.id;
+  
+  // Get the average rating using our custom hook
+  const { averageRating, reviewCount } = useAverageRating(productId);
 
   return (
     <header id="relume" className="darkBG px-[5%] py-12 md:py-16 lg:py-20">
       <div className="container">
-        <Breadcrumb className="mb-6 flex flex-wrap items-center text-sm">
-          <BreadcrumbList>
-            <Fragment>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Ver todo</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-            </Fragment>
-            <Fragment>
-              <BreadcrumbItem>
-                <BreadcrumbLink href={`/category/${productCategory}`}>
-                  {productCategory}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-            </Fragment>
-            <Fragment>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="#">{productName}</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Fragment>
-          </BreadcrumbList>
-        </Breadcrumb>
-        {/* Changed grid ratio to give less space to image */}
         <div className="grid grid-cols-1 gap-y-8 md:gap-y-10 lg:grid-cols-[1fr_1.5fr] lg:gap-x-20">
           {/* Product image container with top alignment */}
           <div className="flex justify-center items-start overflow-hidden pt-1">
@@ -104,69 +75,37 @@ export function ProductHeader1({ product }) {
               ${price}
             </p>
             <div className="mb-5 flex flex-wrap items-center gap-3 md:mb-6">
-              <Star rating={3.5} />
-              <p className="text-sm">(3.5 estrellas) • 10 opiniones</p>
+              <Star rating={parseFloat(averageRating) || 0} />
+              <p className="text-sm">
+                ({averageRating} estrellas) • {reviewCount} {reviewCount === 1 ? 'opinión' : 'opiniones'}
+              </p>
             </div>
             <div className="mb-5 md:mb-6">
               {documentToReactComponents(productDescription)}
             </div>
             <form className="mb-8">
-              <div className="grid grid-cols-1 gap-6">
-                <div className="flex flex-col">
-                  <Label className="mb-2">Variante</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleccionar" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="first-choice">Option One</SelectItem>
-                      <SelectItem value="second-choice">Option Two</SelectItem>
-                      <SelectItem value="third-choice">Option Three</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col">
-                  <Label className="mb-2">Variante</Label>
-                  <div className="flex flex-wrap gap-4">
-                    <a
-                      href="#"
-                      className="rounded-button inline-flex gap-3 items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border border-border-primary bg-background-alternative text-text-alternative px-4 py-2"
-                    >
-                      Opción uno
-                    </a>
-                    <a
-                      href="#"
-                      className="rounded-button inline-flex gap-3 items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border border-border-primary text-text-primary bg-background-primary px-4 py-2"
-                    >
-                      Opción dos
-                    </a>
-                    <a
-                      href="#"
-                      className="rounded-button inline-flex gap-3 items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border border-border-primary text-text-primary bg-background-primary px-4 py-2 pointer-events-none opacity-25"
-                    >
-                      Opción tres
-                    </a>
-                  </div>
-                </div>
-                <div className="flex flex-col">
-                  <Label htmlFor="quantity" className="mb-2">
-                    Cantidad
-                  </Label>
-                  <Input
-                    type="number"
-                    id="quantity"
-                    placeholder="1"
-                    className="w-16"
-                  />
-                </div>
-              </div>
               <div className="mt-8 mb-4 flex flex-col gap-y-4">
-                <Button title="Agregar al carrito">Agregar al carrito</Button>
-                <Button title="Comprar ahora" variant="secondary">
-                  Comprar ahora
+                {/* Hotmart button - using onClick */}
+                <Button 
+                  title="Comprar en Hotmart" 
+                  className="w-full"
+                  onClick={() => window.open(externalUrl, '_blank', 'noopener,noreferrer')}
+                >
+                  Comprar en Hotmart
                 </Button>
+                
+                {/* Amazon button - also using onClick */}
+                {product.fields.amazonUrl && (
+                  <Button
+                    title="Comprar en Amazon"
+                    variant="secondary"
+                    className="w-full"
+                    onClick={() => window.open(product.fields.amazonUrl, '_blank', 'noopener,noreferrer')}
+                  >
+                    Comprar en Amazon
+                  </Button>
+                )}
               </div>
-              <p className="text-center text-xs">Envío gratis sobre $50</p>
             </form>
             <Accordion type="multiple">
               <AccordionItem value="item-0">

@@ -9,6 +9,10 @@ export function Blog1({ initialPosts = [] }) {
   const [isLoading, setIsLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   const [error, setError] = useState(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 12; // Changed to show 4 rows × 3 columns
 
   useEffect(() => {
     // Extract categories from posts
@@ -18,11 +22,28 @@ export function Blog1({ initialPosts = [] }) {
     const uniqueCategories = [...new Set(allCategories)];
     setCategories(uniqueCategories);
   }, [initialPosts]);
+  
+  // Reset to first page when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory]);
 
-  const filteredPosts =
+  // Filter posts by selected category
+  const filteredByCategory =
     activeCategory === "all"
       ? posts
       : posts.filter((post) => post.fields.blogCategories === activeCategory);
+      
+  // Calculate pagination
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredByCategory.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredByCategory.length / postsPerPage);
+  
+  // Handle page changes
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   return (
     <section id="relume" className="darkBG px-[5%] py-16 md:py-24 lg:py-28">
@@ -49,11 +70,11 @@ export function Blog1({ initialPosts = [] }) {
           </div>
         ) : (
           <div className="flex flex-col justify-start">
-            {/* Categories Filter */}
-            <div className="no-scrollbar mb-12 ml-[-5vw] flex w-screen items-center justify-start overflow-scroll pl-[5vw] md:mb-16 md:ml-0 md:w-full md:justify-center md:overflow-hidden md:pl-0">
+            {/* Categories Filter - Updated for Multiple Rows */}
+            <div className="mb-12 flex flex-wrap gap-2 justify-center">
               <button
                 onClick={() => setActiveCategory("all")}
-                className={`rounded-button inline-flex gap-3 items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border px-4 py-2 ${
+                className={`rounded-button inline-flex gap-3 items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border px-4 py-2 mb-2 ${
                   activeCategory === "all"
                     ? "text-text-primary bg-background-primary border-border-primary"
                     : "text-text-primary gap-2 bg-transparent border-transparent"
@@ -66,7 +87,7 @@ export function Blog1({ initialPosts = [] }) {
                 <button
                   key={index}
                   onClick={() => setActiveCategory(category)}
-                  className={`rounded-button inline-flex items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border px-4 py-2 ${
+                  className={`rounded-button inline-flex items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border px-4 py-2 mb-2 ${
                     activeCategory === category
                       ? "text-text-primary bg-background-primary border-border-primary"
                       : "text-text-primary gap-2 bg-transparent border-transparent"
@@ -78,9 +99,9 @@ export function Blog1({ initialPosts = [] }) {
             </div>
 
             {/* Blog Posts Grid */}
-            <div className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2 md:gap-y-16 lg:grid-cols-3">
-              {filteredPosts.length > 0 ? (
-                filteredPosts.map((post) => (
+            <div className="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-2 md:gap-y-16 lg:grid-cols-3">
+              {currentPosts.length > 0 ? (
+                currentPosts.map((post) => (
                   <div className="border border-border-primary rounded-4xl" key={post.sys.id}>
                     <Link
                       href={`/blog/${post.fields.blogSlug}`}
@@ -133,6 +154,65 @@ export function Blog1({ initialPosts = [] }) {
                 </p>
               )}
             </div>
+            
+            {/* Pagination Controls */}
+            {filteredByCategory.length > postsPerPage && (
+              <div className="flex justify-center mt-12 space-x-2">
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                  className={`px-4 py-2 border rounded ${
+                    currentPage === 1 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : 'hover:bg-[#333] transition-colors'
+                  }`}
+                >
+                  &larr; Anterior
+                </button>
+                
+                {[...Array(totalPages)].map((_, i) => {
+                  const pageNum = i + 1;
+                  // Show limited page numbers with ellipsis
+                  if (
+                    pageNum === 1 || 
+                    pageNum === totalPages ||
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => paginate(pageNum)}
+                        className={`px-4 py-2 border rounded ${
+                          currentPage === pageNum 
+                            ? 'bg-[#501E16] text-white' 
+                            : 'hover:bg-[#333] transition-colors'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  } else if (
+                    (pageNum === currentPage - 2 && currentPage > 3) ||
+                    (pageNum === currentPage + 2 && currentPage < totalPages - 2)
+                  ) {
+                    return <span key={pageNum} className="px-2 py-2">...</span>;
+                  }
+                  return null;
+                })}
+                
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 border rounded ${
+                    currentPage === totalPages 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : 'hover:bg-[#333] transition-colors'
+                  }`}
+                >
+                  Siguiente &rarr;
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

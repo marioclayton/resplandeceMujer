@@ -9,7 +9,7 @@ export function Layout194() {
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 lg:gap-x-20">
           <div className="order-2 md:order-1">
             <img
-              src="/assets/abf0789d-1459-4567-9c40-9891a41d9d45.webp"
+              src="/assets/IMG_2321.jpg"
               className="w-full object-cover rounded-4xl"
               alt="Relume placeholder image"
             />
