@@ -74,8 +74,8 @@ export default async function Page() {
 
   return (
     <div>
-      {/* Use any[] as a quick fix for deployment */}
-      <Blog1 initialPosts={posts as any[]} />
+      {/* More aggressive type assertion for deployment */}
+      <Blog1 initialPosts={posts as unknown as never[]} />
       <Faq3 />
     </div>
   );
