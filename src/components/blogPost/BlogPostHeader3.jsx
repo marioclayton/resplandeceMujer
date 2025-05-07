@@ -9,7 +9,7 @@ import {
 } from "@relume_io/relume-ui";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 
 export function BlogPostHeader3({ post }) {
   // Add state to track navbar height
@@ -28,16 +28,30 @@ export function BlogPostHeader3({ post }) {
   // Extract fields using correct field names from Contentful model
   const { blogTitle, blogPublishDate, blogAuthor, blogImage, blogCategories } = post.fields;
 
-  // Format the date if it exists and is parseable
+  // Format the date with improved error handling
   let formattedDate = null;
-  try {
-    if (blogPublishDate) {
-      formattedDate = format(new Date(blogPublishDate), "MMMM dd, yyyy");
+  if (blogPublishDate) {
+    try {
+      // First try to parse as ISO date (most reliable method)
+      const date = parseISO(blogPublishDate);
+      
+      if (isValid(date)) {
+        formattedDate = format(date, "MMMM dd, yyyy");
+      } else {
+        // Fallback to standard date parsing
+        const fallbackDate = new Date(blogPublishDate);
+        if (isValid(fallbackDate)) {
+          formattedDate = format(fallbackDate, "MMMM dd, yyyy");
+        } else {
+          // If all parsing fails, use the raw string
+          formattedDate = blogPublishDate;
+        }
+      }
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      // Use the raw date as fallback if parsing fails
+      formattedDate = blogPublishDate;
     }
-  } catch (error) {
-    console.error("Error formatting date:", error);
-    // Use the raw date as fallback
-    formattedDate = blogPublishDate;
   }
 
   return (
