@@ -1,16 +1,11 @@
 @import "tailwindcss";
 
-
-
 :root {
-  
-
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Set a fixed background color */
+  --foreground: #171717; /* Set a fixed foreground color */
   --primary-color: #501E16;
   --secondary-color: #2ecc71;
   --font-size: 16px;
-  
 }
 
 @theme inline {
@@ -18,13 +13,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
@@ -41,8 +29,6 @@ h1, h2 {
   font-size: 3.0rem;
   font-weight: lighter;
 }
-
-
 
 .container {
   max-width: 1240px;
@@ -64,8 +50,8 @@ h1, h2 {
 
 .secondaryButton {
   background-color: transparent;
-  color: white;
+  color: black; /* Change to black for consistency */
   width: 120px;
   border-radius: 30px;
-  border-color: balck;
+  border-color: black; /* Fix typo: 'balck' to 'black' */
 }
