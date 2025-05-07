@@ -33,9 +33,9 @@ export function Footer1() {
           <div className="flex flex-col">
             <a href="#" className="mb-5 md:mb-6">
               <img
-                src="https://d22po4pjz3o32e.cloudfront.net/logo-image.svg"
+                src="/assets/logo.png" // Updated to use logo.png from the assets folder
                 alt="Logo image"
-                className="inline-block"
+                className="inline-block w-24 md:w-32" // Adjusted size for smaller logo
               />
             </a>
             <p className="mb-5 md:mb-6">
