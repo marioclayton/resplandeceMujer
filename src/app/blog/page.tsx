@@ -1,7 +1,7 @@
 import React from "react";
 import { Blog1 } from "../../components/blogPage/Blog1";
 import { Faq3 } from "../../components/blogPage/Faq3";
-import { Entry, createClient } from 'contentful';
+import { createClient } from 'contentful';
 
 // Add this export to enable revalidation every 60 seconds
 export const revalidate = 60;
