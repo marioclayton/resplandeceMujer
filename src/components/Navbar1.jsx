@@ -16,6 +16,7 @@ const useRelume = () => {
     : "closed";
 
   return {
+    isMobileMenuOpen, // Add this to expose the state
     toggleMobileMenu,
     animateMobileMenu,
     animateMobileMenuButtonSpan,
@@ -25,6 +26,7 @@ const useRelume = () => {
 export function Navbar1() {
   const [isClient, setIsClient] = useState(false);
   const [hasBackground, setHasBackground] = useState(false);
+  const useActive = useRelume(); // Move this up so we can use it in the JSX
 
   useEffect(() => {
     setIsClient(true);
@@ -41,23 +43,25 @@ export function Navbar1() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const useActive = useRelume();
-
   if (!isClient) return null; // Avoid SSR hydration mismatch
+
+  // Determine background color based on scroll position OR menu state
+  const shouldShowBackground = hasBackground || useActive.isMobileMenuOpen;
 
   return (
     <section
       id="relume"
       className={`z-[999] fixed top-0 left-0 w-full items-center transition-colors duration-300 ${
-        hasBackground ? "bg-[#0a0a0a] shadow-md" : "bg-transparent"
+        shouldShowBackground ? "bg-[#0a0a0a] shadow-md" : "bg-transparent"
       }`}
     >
       <div className="size-full lg:flex lg:items-center lg:justify-between max-w-[1240px] mx-auto">
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-16 lg:min-h-16 lg:px-0">
           <a href="/">
             <img
-              src="https://d22po4pjz3o32e.cloudfront.net/logo-image.svg"
-              alt="Logo image"
+              src="/assets/logo.png"
+              alt="Resplandece Mujer"
+              className="h-10" 
             />
           </a>
           <button
@@ -65,7 +69,7 @@ export function Navbar1() {
             onClick={useActive.toggleMobileMenu}
           >
             <motion.span
-              className="my-[3px] h-0.5 w-6 bg-black"
+              className="my-[3px] h-0.5 w-6 bg-white"
               animate={useActive.animateMobileMenuButtonSpan}
               variants={{
                 open: { translateY: 8, transition: { delay: 0.1 } },
@@ -74,7 +78,7 @@ export function Navbar1() {
               }}
             />
             <motion.span
-              className="my-[3px] h-0.5 w-6 bg-black"
+              className="my-[3px] h-0.5 w-6 bg-white"
               animate={useActive.animateMobileMenu}
               variants={{
                 open: { width: 0, transition: { duration: 0.1 } },
@@ -85,7 +89,7 @@ export function Navbar1() {
               }}
             />
             <motion.span
-              className="my-[3px] h-0.5 w-6 bg-black"
+              className="my-[3px] h-0.5 w-6 bg-white"
               animate={useActive.animateMobileMenuButtonSpan}
               variants={{
                 open: { translateY: -8, transition: { delay: 0.1 } },

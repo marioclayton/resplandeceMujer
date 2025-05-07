@@ -26,6 +26,8 @@ const useRelume = () => {
   const animateDropdownMenu = isDropdownOpen ? "open" : "close";
   const animateDropdownMenuIcon = isDropdownOpen ? "rotated" : "initial";
   return {
+    isMobileMenuOpen, // Export this state variable
+    isDropdownOpen,   // Export this state variable
     toggleMobileMenu,
     openOnDesktopDropdownMenu,
     closeOnDesktopDropdownMenu,
@@ -56,43 +58,47 @@ export function Navbar1() {
             className="-mr-2 flex size-12 flex-col items-center justify-center lg:hidden"
             onClick={useActive.toggleMobileMenu}
           >
-            <motion.span
-              className="my-[3px] h-0.5 w-6 bg-black"
-              animate={useActive.animateMobileMenuButtonSpan}
-              variants={{
-                open: { translateY: 8, transition: { delay: 0.1 } },
-                rotatePhase: { rotate: -45, transition: { delay: 0.2 } },
-                closed: {
-                  translateY: 0,
-                  rotate: 0,
-                  transition: { duration: 0.2 },
-                },
-              }}
-            />
-            <motion.span
-              className="my-[3px] h-0.5 w-6 bg-black"
-              animate={useActive.animateMobileMenu}
-              variants={{
-                open: { width: 0, transition: { duration: 0.1 } },
-                closed: {
-                  width: "1.5rem",
-                  transition: { delay: 0.3, duration: 0.2 },
-                },
-              }}
-            />
-            <motion.span
-              className="my-[3px] h-0.5 w-6 bg-black"
-              animate={useActive.animateMobileMenuButtonSpan}
-              variants={{
-                open: { translateY: -8, transition: { delay: 0.1 } },
-                rotatePhase: { rotate: 45, transition: { delay: 0.2 } },
-                closed: {
-                  translateY: 0,
-                  rotate: 0,
-                  transition: { duration: 0.2 },
-                },
-              }}
-            />
+            <svg
+              width="24"
+              height="18"
+              viewBox="0 0 24 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <motion.path
+                d="M1 1H23"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                animate={
+                  useActive.isMobileMenuOpen // Access through useActive
+                    ? { d: "M2 16L22 2" }
+                    : { d: "M1 1H23" }
+                }
+              />
+              <motion.path
+                d="M1 9H23"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                animate={
+                  useActive.isMobileMenuOpen // Access through useActive
+                    ? { opacity: 0 } 
+                    : { opacity: 1 }
+                }
+              />
+              <motion.path
+                d="M1 17H23"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                animate={
+                  useActive.isMobileMenuOpen // Access through useActive
+                    ? { d: "M2 2L22 16" }
+                    : { d: "M1 17H23" }
+                }
+              />
+            </svg>
           </button>
         </div>
         <motion.div
