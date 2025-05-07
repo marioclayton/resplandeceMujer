@@ -17,7 +17,7 @@ async function getHomePageData() {
     const latestBlogResponse = await client.getEntries({
       content_type: "blogPost",
       limit: 1,
-      order: '-fields.blogPublishDate', // Newest first
+      order: ['-fields.blogPublishDate'], // Changed to array syntax
       include: 2
     });
     
