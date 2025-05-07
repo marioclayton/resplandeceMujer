@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff; /* Fixed light background */
-  --foreground: #171717; /* Fixed dark text color */
+  --background: #000000; /* Fixed black background */
+  --foreground: #ffffff; /* Fixed white text color */
   --primary-color: #501E16;
   --secondary-color: #2ecc71;
   --font-size: 16px;
@@ -17,13 +17,13 @@
 
 body {
   font-family: var(--font-noto-sans), sans-serif;
-  background: var(--background); /* Always white background */
-  color: var(--foreground); /* Always dark text */
+  background: var(--background); /* Always black background */
+  color: var(--foreground); /* Always white text */
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-cuprum), sans-serif;
-  color: var(--foreground); /* Ensure headings use the same text color */
+  color: var(--foreground); /* Ensure headings use white text */
 }
 
 h1, h2 {
@@ -42,17 +42,22 @@ h1, h2 {
 }
 
 .primaryButton {
-  background-color: white;
-  color: var(--foreground); /* Match text color to foreground */
+  background-color: var(--foreground); /* White button background */
+  color: var(--background); /* Black text on buttons */
   width: 120px;
   border-radius: 30px;
-  border-color: white;
+  border-color: var(--foreground); /* White border */
 }
 
 .secondaryButton {
   background-color: transparent;
-  color: var(--foreground); /* Match text color to foreground */
+  color: var(--foreground); /* White text */
   width: 120px;
   border-radius: 30px;
-  border-color: var(--foreground); /* Match border color to foreground */
+  border-color: var(--foreground); /* White border */
+}
+
+/* Ensure all text elements use the foreground color */
+p, span, a, li, div {
+  color: var(--foreground); /* Always white text */
 }
