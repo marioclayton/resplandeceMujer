@@ -196,7 +196,7 @@ export function ContactUs() {
             
             <p className="mt-4 text-center text-sm">
               Al enviar este formulario, aceptas nuestra{" "}
-              <a href="/privacy-policy" className="underline">
+              <a href="/privacidad" className="underline">
                 política de privacidad
               </a>
               .
