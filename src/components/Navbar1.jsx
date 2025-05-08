@@ -124,13 +124,13 @@ export function Navbar1() {
             Blog
           </a>
           <a
-            href="/products"
+            href="/productos"
             className="block py-3 text-md lg:px-4 lg:py-2 lg:text-base"
           >
             Productos
           </a>
           <a
-            href="/contact"
+            href="/contacto"
             className="block py-3 text-md lg:px-4 lg:py-2 lg:text-base"
           >
             Contacto

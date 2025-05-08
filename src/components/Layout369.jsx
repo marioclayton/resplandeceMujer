@@ -89,7 +89,7 @@ export function Layout369({ layoutData }) {
                 </p>
               </div>
               <div className="mt-5 flex items-center gap-4 md:mt-6">
-                <Link href="/products/30-dias-descubriendo-tu-identidad-en-dios">
+                <Link href="/productos/30-dias-descubriendo-tu-identidad-en-dios">
                   <Button
                     title="Ver Producto"
                     variant="link"

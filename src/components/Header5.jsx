@@ -25,7 +25,7 @@ export function Header5() {
               <Link href="/blog">
                 <Button className="primaryButton" title="Descubre">Blog</Button>
               </Link>
-              <Link href="/products">
+              <Link href="/productos">
                 <Button className="secondaryButton" title="Únete" variant="secondary-alt">
                   Productos
                 </Button>

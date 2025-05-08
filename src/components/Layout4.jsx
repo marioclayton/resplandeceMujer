@@ -3,7 +3,6 @@
 import { Button } from "@relume_io/relume-ui";
 import React from "react";
 import Link from "next/link"; // Add this import
-import { RxChevronRight } from "react-icons/rx";
 
 export function Layout4() {
   return (
@@ -46,7 +45,7 @@ export function Layout4() {
                   Blog
                 </Button>
               </Link>
-              <Link href="/products">
+              <Link href="/productos">
                 <Button
                   className="secondaryButton"
                   title="Productos"
