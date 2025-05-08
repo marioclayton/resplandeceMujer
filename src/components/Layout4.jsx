@@ -13,10 +13,10 @@ export function Layout4() {
           <div>
             <p className="mb-3 font-semibold md:mb-4">Inspiración</p>
             <h1 className="rb-5 mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
-              Descubre el poder de la fe femenina
+            Mujer, resplandece en el propósito que Dios diseñó para ti
             </h1>
             <p className="mb-6 md:mb-8 md:text-md">
-              Este blog es un refugio para mujeres cristianas que buscan
+              Este blog es un refugio para mujeres que buscan
               fortalecer su fe. Aquí encontrarás recursos, historias y apoyo
               para tu viaje espiritual.
             </p>

@@ -75,45 +75,41 @@ export function Layout369({ layoutData }) {
             </div>
           )}
 
-          {/* Highest Rated Product Card */}
-          {layoutData.highestRatedProduct && (
-            <div className="flex flex-col h-full border border-border-primary rounded-4xl overflow-hidden">
-              {/* Content section - add flex-1 to make it expand and push image down */}
-              <div className="flex flex-col justify-center p-6 flex-1">
-                <div>
-                  <p className="mb-2 text-sm font-semibold">Producto Destacado</p>
-                  <h3 className="mb-2 text-xl font-bold md:text-2xl">
-                    {layoutData.highestRatedProduct.fields.productName}
-                  </h3>
-                  <p className="line-clamp-3">
-                    {layoutData.highestRatedProduct.fields.shortDescription || "Nuestro producto mejor valorado."}
-                  </p>
-                </div>
-                <div className="mt-5 flex items-center gap-4 md:mt-6">
-                  <Link href={`/products/${layoutData.highestRatedProduct.fields.productSlug}`}>
-                    <Button
-                      title="Ver Producto"
-                      variant="link"
-                      size="link"
-                      iconRight={<RxChevronRight />}
-                    >
-                      Ver Producto
-                    </Button>
-                  </Link>
-                </div>
+          {/* Featured Product Card - Hardcoded to 30 días devocional */}
+          <div className="flex flex-col h-full border border-border-primary rounded-4xl overflow-hidden">
+            {/* Content section */}
+            <div className="flex flex-col justify-center p-6 flex-1">
+              <div>
+                <p className="mb-2 text-sm font-semibold">Producto Destacado</p>
+                <h3 className="mb-2 text-xl font-bold md:text-2xl">
+                  30 días descubriendo tu identidad en Dios
+                </h3>
+                <p className="line-clamp-3">
+                  Un devocional de 30 días que te ayudará a descubrir quién eres en Cristo y cuál es tu propósito divino.
+                </p>
               </div>
-              {/* Image container - will now be pushed to the bottom */}
-              {layoutData.highestRatedProduct.fields.productImage && (
-                <div className="h-56 md:h-64 mt-auto">
-                  <img
-                    src={layoutData.highestRatedProduct.fields.productImage.fields.file.url}
-                    alt={layoutData.highestRatedProduct.fields.productName}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+              <div className="mt-5 flex items-center gap-4 md:mt-6">
+                <Link href="/products/30-dias-descubriendo-tu-identidad-en-dios">
+                  <Button
+                    title="Ver Producto"
+                    variant="link"
+                    size="link"
+                    iconRight={<RxChevronRight />}
+                  >
+                    Ver Producto
+                  </Button>
+                </Link>
+              </div>
             </div>
-          )}
+            {/* Image container */}
+            <div className="h-56 md:h-64 mt-auto">
+              <img
+                src="https://images.ctfassets.net/z2axwray8yjn/6VqZIePYzYTQ2IlTL8UfAp/f41148eb8c4f7978ba37d556a9ffb690/PinkYellowAestheticRomanticFlowerWatercolorNotebookCover1.png"
+                alt="30 días descubriendo tu identidad en Dios"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

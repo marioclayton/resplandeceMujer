@@ -52,7 +52,7 @@ export function Blog1({ initialPosts = [] }) {
           <div className="mx-auto w-full max-w-lg text-center">
             <p className="mb-3 font-semibold md:mb-4">Blog</p>
             <h1 className="lg:text-10xl mb-5 text-6xl font-bold md:mb-6 md:text-9xl">
-              Artículos Inspiradores para Mujeres
+              Descubre el poder transformador de la fe
             </h1>
             <p className="md:text-md">
               Explora nuestros artículos más destacados y enriquecedores.

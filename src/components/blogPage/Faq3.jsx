@@ -33,22 +33,11 @@ export function Faq3() {
               ¿Qué temas se abordan?
             </AccordionTrigger>
             <AccordionContent className="md:pb-6">
-              En nuestro blog, abordamos temas de fe, espiritualidad, y
-              crecimiento personal. Nuestro objetivo es inspirar y empoderar a
-              las mujeres cristianas. Cada artículo está diseñado para ofrecer
+              En nuestro blog, abordamos temas de fe y crecimiento espiritual, desarrollo personal matrimonio y familia, asi como bienestar y salud fisica. Nuestro proposito es inspirar a la mujer a vivir con proposito y plenitud. Cada artículo está diseñado para ofrecer
               apoyo y reflexión.
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="md:py-5 md:text-md">
-              ¿Cómo puedo contribuir?
-            </AccordionTrigger>
-            <AccordionContent className="md:pb-6">
-              Te invitamos a compartir tus experiencias y reflexiones. Puedes
-              enviar un artículo o sugerencias a nuestro correo. Valoramos cada
-              voz y queremos que todas sean escuchadas.
-            </AccordionContent>
-          </AccordionItem>
+          
           <AccordionItem value="item-2">
             <AccordionTrigger className="md:py-5 md:text-md">
               ¿Hay una comunidad?

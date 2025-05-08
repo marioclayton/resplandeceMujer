@@ -42,16 +42,19 @@ export function ContactUs() {
     setStatus({ submitting: true, success: false, error: null });
 
     try {
-      // Replace with your actual form submission logic
-      // Example: API call to your backend, email service, etc.
-      const response = await fetch('/api/contact', {
+      // Create FormData object
+      const formElement = e.target;
+      const formSubmitData = new FormData(formElement);
+      
+      // Submit the form using fetch
+      const response = await fetch(formElement.action, {
         method: 'POST',
+        body: formSubmitData,
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+          'Accept': 'application/json'
+        }
       });
-
+      
       if (!response.ok) {
         throw new Error('Error al enviar el formulario');
       }
@@ -95,7 +98,7 @@ export function ContactUs() {
         
         <div className="mx-auto max-w-3xl">
           {status.success && (
-            <div className="mb-8 rounded-lg bg-green-100 p-4 text-green-800">
+            <div className="mb-8 rounded-lg border border-white p-4">
               <p className="font-medium">¡Mensaje enviado con éxito!</p>
               <p>Gracias por contactarnos. Te responderemos lo más pronto posible.</p>
             </div>
@@ -108,7 +111,18 @@ export function ContactUs() {
             </div>
           )}
           
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Update form to use FormSubmit */}
+          <form 
+            onSubmit={handleSubmit} 
+            action="https://formsubmit.co/resplandecemujer4@gmail.com" 
+            method="POST"
+            className="space-y-6"
+          >
+            {/* FormSubmit configuration */}
+            <input type="hidden" name="_subject" value="Nuevo mensaje desde Resplandece Mujer" />
+            <input type="hidden" name="_next" value="https://resplandece-mujer.vercel.app/thanks" />
+            <input type="text" name="_honey" style={{ display: 'none' }} /> {/* Honeypot for spam */}
+            
             <div className="grid gap-6 md:grid-cols-2">
               <div>
                 <label htmlFor="name" className="mb-2 block font-medium">
@@ -120,7 +134,7 @@ export function ContactUs() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16] focus:outline-none focus:ring-1 focus:ring-[#501E16]"
+                  className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16]  focus:ring-1 focus:ring-[#501E16]"
                   required
                 />
               </div>
@@ -135,7 +149,7 @@ export function ContactUs() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16] focus:outline-none focus:ring-1 focus:ring-[#501E16]"
+                  className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16]  focus:ring-1 focus:ring-[#501E16]"
                   required
                 />
               </div>
@@ -151,7 +165,7 @@ export function ContactUs() {
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16] focus:outline-none focus:ring-1 focus:ring-[#501E16]"
+                className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16]  focus:ring-1 focus:ring-[#501E16]"
               />
             </div>
             
@@ -165,7 +179,7 @@ export function ContactUs() {
                 value={formData.message}
                 onChange={handleChange}
                 rows={6}
-                className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16] focus:outline-none focus:ring-1 focus:ring-[#501E16]"
+                className="w-full rounded-lg border border-border-primary bg-transparent px-4 py-3 focus:border-[#501E16]  focus:ring-1 focus:ring-[#501E16]"
                 required
               />
             </div>
