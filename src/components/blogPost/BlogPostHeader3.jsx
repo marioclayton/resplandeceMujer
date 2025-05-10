@@ -26,7 +26,7 @@ export function BlogPostHeader3({ post }) {
   }, []);
 
   // Extract fields using correct field names from Contentful model
-  const { blogTitle, blogPublishDate, blogAuthor, blogImage, blogCategories } = post.fields;
+  const { blogTitle, blogPublishDate, blogAuthor, blogImage, blogCategories, blogExcerpt } = post.fields;
 
   // Format the date with improved error handling
   let formattedDate = null;
@@ -84,11 +84,16 @@ export function BlogPostHeader3({ post }) {
         </Breadcrumb>
 
         <h1 className="text-4xl md:text-5xl font-bold mb-6">{blogTitle}</h1>
+        
+        {/* Added blog excerpt below the title */}
+        {blogExcerpt && (
+          <p className="text-l text-gray-700 mb-6">{blogExcerpt}</p>
+        )}
 
         {/* Categories */}
         {blogCategories && (
           <div className="mb-4">
-            <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+            <span className="bg-black text-white text-sm font-medium px-3 py-1 rounded-full">
               {blogCategories}
             </span>
           </div>

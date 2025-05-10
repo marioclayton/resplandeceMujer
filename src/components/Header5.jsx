@@ -2,14 +2,15 @@
 
 import { Button } from "@relume_io/relume-ui";
 import React from "react";
-import Link from "next/link"; // Add this import
+import Link from "next/link";
 
 export function Header5() {
   return (
-    <section id="relume" className="relative px-[5%] ">
-      <div className="container relative z-10 ">
+    <section id="relume" className="relative px-[5%]">
+      <div className="container relative z-10">
         <div className="flex max-h-screen min-h-svh items-center py-16 md:py-24 lg:py-28">
-          <div className="max-w-md">
+          {/* Added ml-auto and text-right to align the content to the right */}
+          <div className="max-w-md ml-auto text-right">
             <h1 className="mb-5 text-6xl font-bold text-text-alternative md:mb-6 md:text-9xl lg:text-10xl">
               Resplandece Mujer
             </h1>
@@ -21,9 +22,11 @@ export function Header5() {
               fortalecer tu autoestima y a construir una vida plena y
               equilibrada.
             </p>
-            <div className="mt-6 flex flex-wrap gap-4 md:mt-8">
+            <div className="mt-6 flex flex-wrap gap-4 md:mt-8 justify-end">
               <Link href="/blog">
-                <Button className="primaryButton" title="Descubre">Blog</Button>
+                <Button className="primaryButton" title="Descubre">
+                  Blog
+                </Button>
               </Link>
               <Link href="/productos">
                 <Button className="secondaryButton" title="Únete" variant="secondary-alt">
