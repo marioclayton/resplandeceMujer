@@ -28,7 +28,7 @@ const Product10 = ({ products }) => {
                 className="bg-[#501E16] rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
               >
                 <Link
-                  href={`/products/${product.fields.productSlug}`}
+                  href={`/productos/${product.fields.productSlug}`}
                   className="mb-3 block aspect-[5/6] md:mb-4 overflow-hidden rounded-lg"
                 >
                   <img
@@ -38,7 +38,7 @@ const Product10 = ({ products }) => {
                   />
                 </Link>
                 <Link
-                  href={`/products/${product.fields.productSlug}`}
+                  href={`/productos/${product.fields.productSlug}`}
                   className="flex flex-col text-center md:text-md"
                 >
                   <div className="mb-2">
@@ -58,7 +58,7 @@ const Product10 = ({ products }) => {
           )}
         </div>
         <div className="mt-10 flex justify-center md:mt-14 lg:mt-16">
-          <Link href="/products">
+          <Link href="/productos">
             
           </Link>
         </div>
