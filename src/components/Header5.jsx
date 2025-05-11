@@ -15,12 +15,7 @@ export function Header5() {
               Resplandece Mujer
             </h1>
             <p className="text-text-alternative md:text-md">
-              Resplendence Mujer es un espacio pensado para inspirar y acompañar
-              a cada mujer en su camino hacia el bienestar, la autocomprensión y
-              el crecimiento personal. Aquí encontrarás herramientas, consejos y
-              reflexiones que te ayudarán a descubrir tu verdadero potencial, a
-              fortalecer tu autoestima y a construir una vida plena y
-              equilibrada.
+              Resplandece Mujer es un espacio creado para inspirar y acompañar a cada mujer en su camino de fe, crecimiento espiritual y desarrollo personal. Aquí encontrarás herramientas, consejos y reflexiones que te ayudarán a fortalecer tu autoestima, descubrir tu verdadero valor y construir una vida plena, equilibrada y llena del amor de Jesús.
             </p>
             <div className="mt-6 flex flex-wrap gap-4 md:mt-8 justify-end">
               <Link href="/blog">
