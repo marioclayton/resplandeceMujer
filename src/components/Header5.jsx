@@ -9,15 +9,15 @@ export function Header5() {
     <section id="relume" className="relative px-[5%]">
       <div className="container relative z-10">
         <div className="flex max-h-screen min-h-svh items-center py-16 md:py-24 lg:py-28">
-          {/* Added ml-auto and text-right to align the content to the right */}
-          <div className="max-w-md ml-auto text-right">
+          {/* Ensure the wrapping div stays centered on mobile */}
+          <div className="max-w-md mx-auto text-center md:ml-auto md:text-right md:mr-0">
             <h1 className="mb-5 text-6xl font-bold text-text-alternative md:mb-6 md:text-9xl lg:text-10xl">
               Resplandece Mujer
             </h1>
-            <p className="text-text-alternative md:text-md">
+            <p className="text-text-alternative text-justify md:text-md md:text-right">
               Resplandece Mujer es un espacio creado para inspirar y acompañar a cada mujer en su camino de fe, crecimiento espiritual y desarrollo personal. Aquí encontrarás herramientas, consejos y reflexiones que te ayudarán a fortalecer tu autoestima, descubrir tu verdadero valor y construir una vida plena, equilibrada y llena del amor de Jesús.
             </p>
-            <div className="mt-6 flex flex-wrap gap-4 md:mt-8 justify-end">
+            <div className="mt-6 flex flex-wrap gap-4 justify-center md:mt-8 md:justify-end">
               <Link href="/blog">
                 <Button className="primaryButton" title="Descubre">
                   Blog
