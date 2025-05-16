@@ -3,6 +3,7 @@ import { Cuprum, Noto_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar1 } from "../components/Navbar1";
 import { Footer1 } from "../components/Footer1";
+import Script from "next/script"; // <-- Import Script
 
 // Replace Geist with Cuprum
 const cuprum = Cuprum({
@@ -32,6 +33,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-YDE8BBVCB3"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-YDE8BBVCB3');
+          `}
+        </Script>
+      </head>
       <body className={`${cuprum.variable} ${notoSans.variable} antialiased`}>
         <Navbar1 />
         {children}

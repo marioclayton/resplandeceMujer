@@ -87,6 +87,8 @@ export function Footer1() {
                   <a
                     href="https://www.facebook.com/profile.php?id=61565177074140"
                     className="flex items-center gap-3"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <BiLogoFacebookCircle className="size-6" />
                     <span>Facebook</span>
@@ -96,6 +98,8 @@ export function Footer1() {
                   <a
                     href="https://www.instagram.com/resp.landecemujer/"
                     className="flex items-center gap-3"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <BiLogoInstagram className="size-6" />
                     <span>Instagram</span>
@@ -105,6 +109,8 @@ export function Footer1() {
                   <a
                     href="https://www.youtube.com/@ResplandeceMujer-m1o"
                     className="flex items-center gap-3"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <BiLogoYoutube className="size-6" />
                     <span>YouTube</span>
