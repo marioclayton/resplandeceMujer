@@ -4,6 +4,8 @@ import { Header5 } from "../components/Header5";
 import { Layout369 } from "../components/Layout369";
 import { Layout4 } from "../components/Layout4";
 
+export const revalidate = 60;
+
 // Initialize Contentful client
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID || '',

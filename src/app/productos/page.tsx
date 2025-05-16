@@ -1,6 +1,8 @@
 import { createClient } from "contentful";
 import Product10 from "../../components/products/Product10";
 
+export const revalidate = 60;
+
 // Initialize Contentful client
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID,

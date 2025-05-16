@@ -3,6 +3,8 @@ import { ProductHeader1 } from '@/components/product/ProductHeader1';
 import { ProductReviews } from "@/components/product/ProductReviews";
 import { notFound } from 'next/navigation';
 
+export const revalidate = 60;
+
 // Initialize Contentful client
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
