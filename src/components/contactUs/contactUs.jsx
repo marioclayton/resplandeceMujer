@@ -28,8 +28,7 @@ export function ContactUs() {
   // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validation
+
     if (!formData.name || !formData.email || !formData.message) {
       setStatus({
         submitting: false,
@@ -42,31 +41,23 @@ export function ContactUs() {
     setStatus({ submitting: true, success: false, error: null });
 
     try {
-      // Create FormData object
-      const formElement = e.target;
-      const formSubmitData = new FormData(formElement);
-      
-      // Submit the form using fetch
-      const response = await fetch(formElement.action, {
-        method: 'POST',
-        body: formSubmitData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-      
+
       if (!response.ok) {
-        throw new Error('Error al enviar el formulario');
+        throw new Error("Error al enviar el formulario");
       }
-      
-      // Clear form on success
+
       setFormData({
         name: "",
         email: "",
         subject: "",
         message: ""
       });
-      
+
       setStatus({
         submitting: false,
         success: true,
@@ -112,12 +103,7 @@ export function ContactUs() {
           )}
           
           {/* Update form to use FormSubmit */}
-          <form 
-            onSubmit={handleSubmit} 
-            action="https://formsubmit.co/resplandecemujer4@gmail.com" 
-            method="POST"
-            className="space-y-6"
-          >
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* FormSubmit configuration */}
             <input type="hidden" name="_subject" value="Nuevo mensaje desde Resplandece Mujer" />
             <input type="hidden" name="_next" value="https://resplandece-mujer.vercel.app/thanks" />
