@@ -10,10 +10,31 @@ import {
 
 export function Footer1() {
   const [email, setEmail] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ email });
+    setError("");
+    // Mailchimp POST URL
+    const url =
+      "https://us18.list-manage.com/subscribe/post?u=cec1ba5ac5f327afc8a747fcd&id=3b5df28383";
+    // Mailchimp expects form data, not JSON
+    const formData = new FormData();
+    formData.append("EMAIL", email);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        mode: "no-cors", // Mailchimp doesn't send CORS headers
+        body: formData,
+      });
+      setShowPopup(true);
+      setEmail("");
+      setTimeout(() => setShowPopup(false), 4000);
+    } catch (err) {
+      setError("Hubo un error. Intenta de nuevo.");
+    }
   };
 
   return (
@@ -34,20 +55,32 @@ export function Footer1() {
             </p>
             <div className="w-full max-w-md">
               <form
-                className="mb-3 grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-[1fr_max-content] md:gap-y-4"
                 onSubmit={handleSubmit}
+                className="mb-3 grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-[1fr_max-content] md:gap-y-4"
               >
                 <Input
                   id="email"
                   type="email"
+                  name="EMAIL"
                   placeholder="Introduce tu correo"
+                  required
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <Button title="Suscribirse" variant="secondary" size="sm">
                   Suscribirse
                 </Button>
               </form>
+              {showPopup && (
+                <div className="mb-3 flex items-center justify-center rounded-lg border border-white bg-black px-4 py-3 text-white shadow-md">
+                  <span className="font-medium">¡Gracias por suscribirte!</span>
+                </div>
+              )}
+              {error && (
+                <div className="mb-3 flex items-center justify-center rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-700 shadow-md">
+                  {error}
+                </div>
+              )}
               <p className="text-xs">
                 Al suscribirte, aceptas nuestra Política de Privacidad y
                 consientes recibir actualizaciones.
