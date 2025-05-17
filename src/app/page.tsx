@@ -15,30 +15,28 @@ const client = createClient({
 // Fetch layout data on the server
 async function getHomePageData() {
   try {
-    // 1. First fetch the latest blog post
-    const latestBlogResponse = await client.getEntries({
+    // Fetch ALL blog posts (remove limit: 1)
+    const blogsResponse = await client.getEntries({
       content_type: "blogPost",
-      limit: 1,
-      order: ['-fields.blogPublishDate'], // Changed to array syntax
+      order: ['-fields.blogPublishDate'],
       include: 2
     });
-    
-    // 2. Fetch a featured or highest rated product
+
+    // Fetch a featured or highest rated product
     const featuredProductResponse = await client.getEntries({
-      content_type: "product", // Update this to match your product content type
+      content_type: "product",
       limit: 1,
       include: 2
     });
 
-    // Combine the data into a single object
     return {
-      latestBlog: latestBlogResponse.items[0] || null,
+      blogs: blogsResponse.items || [],
       highestRatedProduct: featuredProductResponse.items[0] || null
     };
   } catch (error) {
     console.error('Error fetching home page data:', error);
     return {
-      latestBlog: null,
+      blogs: [],
       highestRatedProduct: null
     };
   }

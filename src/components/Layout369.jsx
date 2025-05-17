@@ -5,9 +5,39 @@ import { Button } from "@relume_io/relume-ui";
 import { RxChevronRight } from "react-icons/rx";
 import Link from "next/link";
 
+// Utility to parse flexible dates
+function parseFlexibleDate(dateStr) {
+  let date = new Date(dateStr);
+  if (!isNaN(date)) return date;
+  const normalized = dateStr.replace(/-/g, '/');
+  const parts = normalized.split('/');
+  if (parts.length === 3) {
+    let [a, b, c] = parts.map(p => p.trim());
+    if (a.length === 4) return new Date(`${a}-${b.padStart(2, '0')}-${c.padStart(2, '0')}`);
+    if (c.length === 4) return new Date(`${c}-${a.padStart(2, '0')}-${b.padStart(2, '0')}`);
+  }
+  return new Date('Invalid Date');
+}
+
 // Modify component to accept data as props instead of fetching it
 export function Layout369({ layoutData }) {
-  if (!layoutData) return null;
+  console.log("Layout369 received:", layoutData);
+
+  if (!layoutData || !layoutData.blogs) return null;
+
+  // Filter out blogs with invalid or missing dates
+  const validBlogs = layoutData.blogs.filter(
+    b => b.fields && b.fields.blogPublishDate && !isNaN(parseFlexibleDate(b.fields.blogPublishDate))
+  );
+
+  if (validBlogs.length === 0) return null;
+
+  // Find the latest blog post by date
+  const latestBlog = validBlogs.reduce((latest, current) => {
+    const latestDate = parseFlexibleDate(latest.fields.blogPublishDate);
+    const currentDate = parseFlexibleDate(current.fields.blogPublishDate);
+    return currentDate > latestDate ? current : latest;
+  }, validBlogs[0]); // <-- Provide initial value
 
   // Use layoutData here instead of fetching directly
   return (
@@ -27,21 +57,21 @@ export function Layout369({ layoutData }) {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Latest Blog Post Card */}
-          {layoutData.latestBlog ? (
+          {latestBlog ? (
             <div className="flex flex-col h-full border border-border-primary rounded-4xl overflow-hidden">
               <div className="flex flex-1 flex-col justify-center p-6">
                 <div>
                   <p className="mb-2 text-sm font-semibold">Último Artículo</p>
                   <h3 className="mb-2 text-xl font-bold md:text-2xl">
-                    {layoutData.latestBlog.fields.blogTitle || "Artículo sin título"}
+                    {latestBlog.fields.blogTitle || "Artículo sin título"}
                   </h3>
                   <p className="line-clamp-3">
-                    {layoutData.latestBlog.fields.blogExcerpt || "Lee nuestro artículo más reciente."}
+                    {latestBlog.fields.blogExcerpt || "Lee nuestro artículo más reciente."}
                   </p>
                 </div>
                 <div className="mt-5 flex flex-wrap items-center gap-4 md:mt-6">
                   <Link href={
-                    layoutData.latestBlog.fields.blogSlug ? `/blog/${layoutData.latestBlog.fields.blogSlug}` :
+                    latestBlog.fields.blogSlug ? `/blog/${latestBlog.fields.blogSlug}` :
                     `/blog`  // Fallback to blog index if no slug
                   }>
                     <Button
@@ -55,11 +85,11 @@ export function Layout369({ layoutData }) {
                   </Link>
                 </div>
               </div>
-              {layoutData.latestBlog.fields.blogImage ? (
+              {latestBlog.fields.blogImage ? (
                 <div className="h-56 md:h-64">
                   <img
-                    src={layoutData.latestBlog.fields.blogImage.fields.file.url}
-                    alt={layoutData.latestBlog.fields.blogTitle || "Blog image"}
+                    src={latestBlog.fields.blogImage.fields.file.url}
+                    alt={latestBlog.fields.blogTitle || "Blog image"}
                     className="w-full h-full object-cover"
                   />
                 </div>
