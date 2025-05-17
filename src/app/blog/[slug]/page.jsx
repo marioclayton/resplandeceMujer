@@ -5,6 +5,9 @@ import { Testimonial5 } from "../../../components/blogPost/Testimonial5";
 import { Blog46 } from "../../../components/blogPost/Blog46";
 import { notFound } from 'next/navigation';
 
+export const revalidate = 60;
+
+
 // Initialize Contentful client
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
