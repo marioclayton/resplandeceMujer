@@ -53,6 +53,20 @@ export default function RootLayout({
           href="/assets/pexels-kqpho-1921168.webp"
           type="image/webp"
         />
+        <link
+          rel="preload"
+          href="https://www.resplandecemujer.com/_next/static/media/c4250770ab8708b6-s.p.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="https://www.resplandecemujer.com/_next/static/media/c4a2af5d29d703b3-s.p.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${cuprum.variable} ${notoSans.variable} antialiased`}>
         <Navbar1 />
