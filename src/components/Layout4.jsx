@@ -3,6 +3,7 @@
 import { Button } from "@relume_io/relume-ui";
 import React from "react";
 import Link from "next/link"; // Add this import
+import Image from "next/image";
 
 export function Layout4() {
   return (
@@ -56,10 +57,12 @@ export function Layout4() {
             </div>
           </div>
           <div>
-            <img
+            <Image
               src="/assets/pexels-mart-production-7218327.jpg"
               className="w-full object-cover rounded-4xl"
               alt="Relume placeholder image"
+              width={800}
+              height={600}
             />
           </div>
         </div>

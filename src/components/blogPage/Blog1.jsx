@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Blog1({ initialPosts = [] }) {
   const [posts, setPosts] = useState(initialPosts);
@@ -101,17 +102,24 @@ export function Blog1({ initialPosts = [] }) {
             {/* Blog Posts Grid */}
             <div className="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-2 md:gap-y-16 lg:grid-cols-3">
               {currentPosts.length > 0 ? (
-                currentPosts.map((post) => (
+                currentPosts.map((post, index) => (
                   <div className="border border-border-primary rounded-4xl" key={post.sys.id}>
                     <Link
                       href={`/blog/${post.fields.blogSlug}`}
                       className="mb-6 inline-block w-full max-w-full"
                     >
                       <div className="w-full overflow-hidden">
-                        <img
-                          src={post.fields.blogImage.fields.file.url}
+                        <Image
+                          src={
+                            post.fields.blogImage.fields.file.url.startsWith("//")
+                              ? "https:" + post.fields.blogImage.fields.file.url
+                              : post.fields.blogImage.fields.file.url
+                          }
                           alt={post.fields.blogTitle}
+                          width={800}
+                          height={600}
                           className="rounded-image rounded-t-4xl aspect-[3/2] size-full object-cover"
+                          priority={index < 3} // Only for the first row (3 images)
                         />
                       </div>
                     </Link>

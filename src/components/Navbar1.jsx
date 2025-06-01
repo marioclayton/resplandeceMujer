@@ -2,6 +2,7 @@
 
 import { useMediaQuery } from "@relume_io/relume-ui";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 const useRelume = () => {
@@ -58,10 +59,12 @@ export function Navbar1() {
       <div className="size-full lg:flex lg:items-center lg:justify-between max-w-[1240px] mx-auto">
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-16 lg:min-h-16 lg:px-0">
           <a href="/">
-            <img
+            <Image
               src="/assets/logo.png"
               alt="Resplandece Mujer"
               className="h-10" 
+              width={40}
+              height={40}
             />
           </a>
           <button

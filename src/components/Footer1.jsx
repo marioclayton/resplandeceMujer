@@ -2,6 +2,7 @@
 
 import { Button, Input } from "@relume_io/relume-ui";
 import React, { useState } from "react";
+import Image from "next/image";
 import {
   BiLogoFacebookCircle,
   BiLogoInstagram,
@@ -43,7 +44,9 @@ export function Footer1() {
         <div className="grid grid-cols-1 gap-x-[8vw] gap-y-12 pb-12 md:gap-y-16 md:pb-18 lg:grid-cols-[0.75fr_1fr] lg:gap-y-4 lg:pb-20">
           <div className="flex flex-col">
             <a href="#" className="mb-5 md:mb-6">
-              <img
+              <Image
+                width={128}
+                height={128}
                 src="/assets/logo.png"
                 alt="Logo image"
                 className="inline-block w-24 md:w-32"

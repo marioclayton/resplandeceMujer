@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "@relume_io/relume-ui";
 import { RxChevronRight } from "react-icons/rx";
 import Link from "next/link";
+import Image from "next/image";
 
 // Utility to parse flexible dates
 function parseFlexibleDate(dateStr) {
@@ -87,10 +88,16 @@ export function Layout369({ layoutData }) {
               </div>
               {latestBlog.fields.blogImage ? (
                 <div className="h-56 md:h-64">
-                  <img
-                    src={latestBlog.fields.blogImage.fields.file.url}
+                  <Image
+                    src={
+                      latestBlog.fields.blogImage.fields.file.url.startsWith("//")
+                        ? "https:" + latestBlog.fields.blogImage.fields.file.url
+                        : latestBlog.fields.blogImage.fields.file.url
+                    }
                     alt={latestBlog.fields.blogTitle || "Blog image"}
                     className="w-full h-full object-cover"
+                    width={1280}
+                    height={853}
                   />
                 </div>
               ) : (
@@ -133,10 +140,12 @@ export function Layout369({ layoutData }) {
             </div>
             {/* Image container */}
             <div className="h-56 md:h-64 mt-auto">
-              <img
-                src="https://images.ctfassets.net/z2axwray8yjn/6VqZIePYzYTQ2IlTL8UfAp/f41148eb8c4f7978ba37d556a9ffb690/PinkYellowAestheticRomanticFlowerWatercolorNotebookCover1.png"
+              <Image
+                src="/assets/PinkYellowAestheticRomanticFlowerWatercolorNotebookCover1.webp"
                 alt="30 días descubriendo tu identidad en Dios"
                 className="w-full h-full object-cover"
+                width={1280}
+                height={853}
               />
             </div>
           </div>
