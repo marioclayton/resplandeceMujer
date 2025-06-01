@@ -3,6 +3,13 @@ import { Button } from "@relume_io/relume-ui";
 import Link from "next/link";
 
 const Product10 = ({ products }) => {
+  // Sort products by displayOrder (ascending), fallback to 999 if missing
+  const sortedProducts = (products || []).slice().sort((a, b) => {
+    const orderA = a.fields.displayOrder ?? 999;
+    const orderB = b.fields.displayOrder ?? 999;
+    return orderA - orderB;
+  });
+
   return (
     <section
       id="relume"
@@ -21,8 +28,8 @@ const Product10 = ({ products }) => {
           </div>
         </div>
         <div className="grid grid-cols-1 justify-items-start gap-x-5 gap-y-12 md:grid-cols-2 md:gap-x-8 md:gap-y-16 lg:grid-cols-3 lg:gap-x-12">
-          {products && products.length > 0 ? (
-            products.map((product) => (
+          {sortedProducts.length > 0 ? (
+            sortedProducts.map((product) => (
               <div
                 key={product.sys.id}
                 className="bg-[#501E16] rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"

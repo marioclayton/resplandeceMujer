@@ -47,6 +47,12 @@ export default function RootLayout({
             gtag('config', 'G-YDE8BBVCB3');
           `}
         </Script>
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/pexels-kqpho-1921168.webp"
+          type="image/webp"
+        />
       </head>
       <body className={`${cuprum.variable} ${notoSans.variable} antialiased`}>
         <Navbar1 />

@@ -21,18 +21,18 @@ export function Layout4() {
             </p>
             <div className="grid grid-cols-1 gap-6 py-2 sm:grid-cols-2">
               <div>
-                <h6 className="mb-3 text-md font-bold leading-[1.4] md:mb-4 md:text-xl">
+                <p className="mb-3 text-md font-bold leading-[1.4] md:mb-4 md:text-xl">
                   Crecimiento Espiritual
-                </h6>
+                </p>
                 <p>
                   Conéctate con otras mujeres que comparten tu fe y
                   experiencias.
                 </p>
               </div>
               <div>
-                <h6 className="mb-3 text-md font-bold leading-[1.4] md:mb-4 md:text-xl">
+                <p className="mb-3 text-md font-bold leading-[1.4] md:mb-4 md:text-xl">
                   Apoyo Comunitario
-                </h6>
+                </p>
                 <p>
                   Únete a una comunidad que te inspira y motiva en tu caminar
                   con Dios.

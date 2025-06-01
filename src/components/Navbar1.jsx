@@ -67,6 +67,9 @@ export function Navbar1() {
           <button
             className="-mr-2 flex size-12 flex-col items-center justify-center lg:hidden"
             onClick={useActive.toggleMobileMenu}
+            aria-label={useActive.isMobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+            aria-expanded={useActive.isMobileMenuOpen}
+            aria-controls="navbar-mobile-menu"
           >
             <motion.span
               className="my-[3px] h-0.5 w-6 bg-white"
@@ -101,6 +104,7 @@ export function Navbar1() {
         </div>
 
         <motion.div
+          id="navbar-mobile-menu"
           variants={{
             open: { height: "var(--height-open, 100dvh)" },
             close: { height: "var(--height-closed, 0)" },

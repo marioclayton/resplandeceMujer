@@ -3,6 +3,7 @@
 import { Button } from "@relume_io/relume-ui";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Header5() {
   return (
@@ -15,7 +16,7 @@ export function Header5() {
               Resplandece Mujer
             </h1>
             <p className="text-text-alternative text-justify md:text-md md:text-right">
-Resplendence Mujer es un espacio pensado para inspirar y acompañar a cada mujer en su camino hacia la fe, el bienestar y el crecimiento personal. Aquí encontrarás herramientas, consejos y reflexiones que te ayudarán a descubrir tu verdadero potencial, a fortalecerte y a construir una vida plena y equilibrada.            </p>
+              Resplendence Mujer es un espacio pensado para inspirar y acompañar a cada mujer en su camino hacia la fe, el bienestar y el crecimiento personal. Aquí encontrarás herramientas, consejos y reflexiones que te ayudarán a descubrir tu verdadero potencial, a fortalecerte y a construir una vida plena y equilibrada.            </p>
             <div className="mt-6 flex flex-wrap gap-4 justify-center md:mt-8 md:justify-end">
               <Link href="/blog">
                 <Button className="primaryButton" title="Descubre">
@@ -32,10 +33,12 @@ Resplendence Mujer es un espacio pensado para inspirar y acompañar a cada mujer
         </div>
       </div>
       <div className="absolute inset-0 z-0">
-        <img
-          src="/assets/pexels-kqpho-1921168.jpg"
-          className="size-full object-cover"
+        <Image
+          src="/assets/pexels-kqpho-1921168.webp"
           alt="Relume placeholder image"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-black/60" />
       </div>
