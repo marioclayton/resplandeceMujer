@@ -59,7 +59,8 @@ export function Testimonial5({ postSlug }) {
                 comment: item.fields.comment,
                 rating: item.fields.rating || 5,
                 date: item.fields.date,
-                avatar: item.fields.avatar?.fields?.file?.url || null
+                avatar: item.fields.avatar?.fields?.file?.url || null,
+                reply: item.fields.reply || null
               };
             }).filter(Boolean); // Remove any null entries
             
@@ -269,6 +270,19 @@ export function Testimonial5({ postSlug }) {
                 <blockquote className="text-md leading-[1.4] font-bold md:text-xl mb-4">
                   "{testimonial.comment}"
                 </blockquote>
+                
+                {/* Display reply if it exists */}
+                {testimonial.reply && (
+                  <div className="mt-4 mb-4 p-4 bg-[#f8f4f1] border-l-4 border-[#501E16] rounded-r-lg">
+                    <div className="flex items-center mb-2">
+                      <span className="text-sm font-semibold text-[#501E16]">Respuesta del autor:</span>
+                    </div>
+                    <p className="text-sm text-gray-700 italic">
+                      "{testimonial.reply}"
+                    </p>
+                  </div>
+                )}
+                
                 <div className="mt-auto flex w-full flex-row items-center gap-3">
                   <div>
                     <img
