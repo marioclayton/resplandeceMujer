@@ -8,6 +8,12 @@ import { createClient as createDeliveryClient } from 'contentful';
 const CONTENTFUL_SPACE_ID = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
 const CONTENTFUL_ACCESS_TOKEN = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
 
+// Debug: Log environment variables (remove this after debugging)
+console.log('Environment check:', {
+  SPACE_ID: CONTENTFUL_SPACE_ID ? 'Present' : 'Missing',
+  ACCESS_TOKEN: CONTENTFUL_ACCESS_TOKEN ? 'Present' : 'Missing'
+});
+
 export function Testimonial5({ postSlug }) {
   const [testimonials, setTestimonials] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -273,11 +279,11 @@ export function Testimonial5({ postSlug }) {
                 
                 {/* Display reply if it exists */}
                 {testimonial.reply && (
-                  <div className="mt-4 mb-4 p-4 bg-[#f8f4f1] border-l-4 border-[#501E16] rounded-r-lg">
+                  <div className="mt-4 mb-4 p-4 bg-black/20 border-l-4 border-[#501E16] rounded-r-lg">
                     <div className="flex items-center mb-2">
                       <span className="text-sm font-semibold text-[#501E16]">Respuesta del autor:</span>
                     </div>
-                    <p className="text-sm text-gray-700 italic">
+                    <p className="text-sm text-white/90 italic">
                       "{testimonial.reply}"
                     </p>
                   </div>
