@@ -34,7 +34,7 @@ export function Header5() {
       </div>
       <div className="absolute inset-0 z-0">
         <Image
-          src="/assets/pexels-kqpho-1921168.webp"
+          src="/assets/pexels-ilyalisauskas-12041877.webp"
           alt="Relume placeholder image"
           fill
           className="object-cover"
