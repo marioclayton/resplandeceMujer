@@ -4,11 +4,14 @@ import Link from "next/link";
 
 const Product10 = ({ products }) => {
   // Sort products by displayOrder (ascending), fallback to 999 if missing
-  const sortedProducts = (products || []).slice().sort((a, b) => {
-    const orderA = a.fields.displayOrder ?? 999;
-    const orderB = b.fields.displayOrder ?? 999;
-    return orderA - orderB;
-  });
+  const sortedProducts = (products || [])
+    .filter(product => product?.fields?.productName && product?.fields?.productSlug) // Filter out incomplete products
+    .slice()
+    .sort((a, b) => {
+      const orderA = a?.fields?.displayOrder ?? 999;
+      const orderB = b?.fields?.displayOrder ?? 999;
+      return orderA - orderB;
+    });
 
   return (
     <section
@@ -38,11 +41,17 @@ const Product10 = ({ products }) => {
                   href={`/productos/${product.fields.productSlug}`}
                   className="mb-3 block aspect-[5/6] md:mb-4 overflow-hidden rounded-lg"
                 >
-                  <img
-                    src={product.fields.productImage.fields.file.url}
-                    alt={product.fields.productName}
-                    className="size-full object-cover"
-                  />
+                  {product.fields.productImage?.fields?.file?.url ? (
+                    <img
+                      src={product.fields.productImage.fields.file.url}
+                      alt={product.fields.productName || "Product image"}
+                      className="size-full object-cover"
+                    />
+                  ) : (
+                    <div className="size-full bg-gray-200 flex items-center justify-center">
+                      <p className="text-gray-500 text-sm">No image</p>
+                    </div>
+                  )}
                 </Link>
                 <Link
                   href={`/productos/${product.fields.productSlug}`}
@@ -50,16 +59,16 @@ const Product10 = ({ products }) => {
                 >
                   <div className="mb-2">
                     <h3 className="font-semibold text-[#ffffff]">
-                      {product.fields.productName}
+                      {product.fields.productName || "Untitled Product"}
                     </h3>
                     <div className="text-sm text-[#ffffff]">
-                      {product.fields.productCategory}
+                      {product.fields.productCategory || "Uncategorized"}
                     </div>
                   </div>
                   <div className="text-md font-semibold text-[#ffffff] md:text-lg">
                     {product.fields.isFreePdf 
-                      ? <span className="text-green-300">📥 Gratis</span>
-                      : `$${product.fields.price}`
+                      ? <span className="text-green-300">Gratis</span>
+                      : `$${product.fields.price || "0"}`
                     }
                   </div>
                 </Link>

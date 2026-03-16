@@ -63,18 +63,24 @@ export function ProductHeader1({ product }) {
         <div className="grid grid-cols-1 gap-y-8 md:gap-y-10 lg:grid-cols-[1fr_1.5fr] lg:gap-x-20">
           {/* Product image container with top alignment */}
           <div className="flex justify-center items-start overflow-hidden pt-1">
-            <img
-              src={productImage.fields.file.url}
-              alt={productName}
-              className="aspect-[5/6] max-w-full max-h-[500px] object-contain rounded-lg"
-            />
+            {productImage?.fields?.file?.url ? (
+              <img
+                src={productImage.fields.file.url}
+                alt={productName || "Product image"}
+                className="aspect-[5/6] max-w-full max-h-[500px] object-contain rounded-lg"
+              />
+            ) : (
+              <div className="aspect-[5/6] max-w-full max-h-[500px] bg-gray-200 flex items-center justify-center rounded-lg">
+                <p className="text-gray-500">No image available</p>
+              </div>
+            )}
           </div>
           <div>
             <h1 className="mb-2 text-4xl leading-[1.2] font-bold md:text-5xl lg:text-6xl">
-              {productName}
+              {productName || "Untitled Product"}
             </h1>
             <p className="mb-5 text-xl font-bold md:mb-6 md:text-2xl">
-              {isFreePdf ? 'Gratis' : `$${price}`}
+              {isFreePdf ? 'Gratis' : `$${price || "0"}`}
             </p>
             <div className="mb-5 flex flex-wrap items-center gap-3 md:mb-6">
               <Star rating={parseFloat(averageRating) || 0} />
@@ -83,7 +89,9 @@ export function ProductHeader1({ product }) {
               </p>
             </div>
             <div className="mb-5 md:mb-6">
-              {documentToReactComponents(productDescription)}
+              {productDescription ? documentToReactComponents(productDescription) : (
+                <p className="text-gray-500">No description available</p>
+              )}
             </div>
             <form className="mb-8">
               <div className="mt-8 mb-4 flex flex-col gap-y-4">
@@ -99,7 +107,7 @@ export function ProductHeader1({ product }) {
                           // Option 1: Direct download from Contentful (current implementation)
                           const link = document.createElement('a');
                           link.href = `https:${pdfFile.fields.file.url}`;
-                          link.download = pdfFile.fields.file.fileName || `${productName}.pdf`;
+                          link.download = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
                           link.target = '_blank';
                           document.body.appendChild(link);
                           link.click();
@@ -112,7 +120,7 @@ export function ProductHeader1({ product }) {
                           //   const url = window.URL.createObjectURL(blob);
                           //   const link = document.createElement('a');
                           //   link.href = url;
-                          //   link.download = pdfFile.fields.file.fileName || `${productName}.pdf`;
+                          //   link.download = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
                           //   document.body.appendChild(link);
                           //   link.click();
                           //   document.body.removeChild(link);
@@ -125,7 +133,7 @@ export function ProductHeader1({ product }) {
                         }
                       }}
                     >
-                      📥 Descargar PDF Gratis
+                      Descargar PDF Gratis
                     </Button>
                   )
                 ) : (

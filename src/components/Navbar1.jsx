@@ -4,6 +4,7 @@ import { useMediaQuery } from "@relume_io/relume-ui";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { useIsClient } from "../hooks/useIsClient";
 
 const useRelume = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -25,15 +26,15 @@ const useRelume = () => {
 };
 
 export function Navbar1() {
-  const [isClient, setIsClient] = useState(false);
+  const isClient = useIsClient();
   const [hasBackground, setHasBackground] = useState(false);
   const useActive = useRelume(); // Move this up so we can use it in the JSX
 
   useEffect(() => {
-    setIsClient(true);
+    if (!isClient) return; // Only run on client side
 
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      if (typeof window !== 'undefined' && window.scrollY > 50) {
         setHasBackground(true);
       } else {
         setHasBackground(false);
@@ -42,7 +43,7 @@ export function Navbar1() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isClient]);
 
   if (!isClient) return null; // Avoid SSR hydration mismatch
 

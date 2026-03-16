@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Cuprum, Noto_Sans } from "next/font/google";
 import "./globals.css";
+import "../lib/localStorage-polyfill"; // Import localStorage polyfill
 import { Navbar1 } from "../components/Navbar1";
 import { Footer1 } from "../components/Footer1";
+import { ClientOnly } from "../components/ClientOnly";
+import ErrorBoundary from "../components/ErrorBoundary";
 import Script from "next/script"; // <-- Import Script
 
 // Replace Geist with Cuprum
@@ -41,10 +44,12 @@ export default function RootLayout({
         />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-YDE8BBVCB3');
+            if (typeof window !== 'undefined') {
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-YDE8BBVCB3');
+            }
           `}
         </Script>
         <link
@@ -69,9 +74,15 @@ export default function RootLayout({
         />
       </head>
       <body className={`${cuprum.variable} ${notoSans.variable} antialiased`}>
-        <Navbar1 />
-        {children}
-        <Footer1 />
+        <ErrorBoundary>
+          <ClientOnly>
+            <Navbar1 />
+          </ClientOnly>
+          {children}
+          <ClientOnly>
+            <Footer1 />
+          </ClientOnly>
+        </ErrorBoundary>
       </body>
     </html>
   );
