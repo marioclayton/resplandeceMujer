@@ -47,6 +47,8 @@ export function ProductHeader1({ product }) {
     price,
     productCategory,
     externalUrl,
+    isFreePdf,
+    pdfFile,
   } = product.fields;
   
   // Get system ID for the product
@@ -72,7 +74,7 @@ export function ProductHeader1({ product }) {
               {productName}
             </h1>
             <p className="mb-5 text-xl font-bold md:mb-6 md:text-2xl">
-              ${price}
+              {isFreePdf ? 'Gratis' : `$${price}`}
             </p>
             <div className="mb-5 flex flex-wrap items-center gap-3 md:mb-6">
               <Star rating={parseFloat(averageRating) || 0} />
@@ -85,25 +87,71 @@ export function ProductHeader1({ product }) {
             </div>
             <form className="mb-8">
               <div className="mt-8 mb-4 flex flex-col gap-y-4">
-                {/* Hotmart button - using onClick */}
-                <Button 
-                  title="Comprar en Hotmart" 
-                  className="w-full"
-                  onClick={() => window.open(externalUrl, '_blank', 'noopener,noreferrer')}
-                >
-                  Comprar en Hotmart
-                </Button>
-                
-                {/* Amazon button - also using onClick */}
-                {product.fields.amazonUrl && (
-                  <Button
-                    title="Comprar en Amazon"
-                    variant="secondary"
-                    className="w-full"
-                    onClick={() => window.open(product.fields.amazonUrl, '_blank', 'noopener,noreferrer')}
-                  >
-                    Comprar en Amazon
-                  </Button>
+                {/* Conditional rendering based on product type */}
+                {isFreePdf ? (
+                  // Free PDF Download Button
+                  pdfFile && (
+                    <Button 
+                      title="Descargar PDF Gratis" 
+                      className="w-full"
+                      onClick={async () => {
+                        try {
+                          // Option 1: Direct download from Contentful (current implementation)
+                          const link = document.createElement('a');
+                          link.href = `https:${pdfFile.fields.file.url}`;
+                          link.download = pdfFile.fields.file.fileName || `${productName}.pdf`;
+                          link.target = '_blank';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+
+                          // Option 2: Use API route (uncomment to use instead)
+                          // const response = await fetch(`/api/download?productId=${productId}`);
+                          // if (response.ok) {
+                          //   const blob = await response.blob();
+                          //   const url = window.URL.createObjectURL(blob);
+                          //   const link = document.createElement('a');
+                          //   link.href = url;
+                          //   link.download = pdfFile.fields.file.fileName || `${productName}.pdf`;
+                          //   document.body.appendChild(link);
+                          //   link.click();
+                          //   document.body.removeChild(link);
+                          //   window.URL.revokeObjectURL(url);
+                          // } else {
+                          //   console.error('Download failed');
+                          // }
+                        } catch (error) {
+                          console.error('Download error:', error);
+                        }
+                      }}
+                    >
+                      📥 Descargar PDF Gratis
+                    </Button>
+                  )
+                ) : (
+                  // Paid Product Buttons (existing functionality)
+                  <>
+                    {externalUrl && (
+                      <Button 
+                        title="Comprar en Hotmart" 
+                        className="w-full"
+                        onClick={() => window.open(externalUrl, '_blank', 'noopener,noreferrer')}
+                      >
+                        Comprar en Hotmart
+                      </Button>
+                    )}
+                    
+                    {product.fields.amazonUrl && (
+                      <Button
+                        title="Comprar en Amazon"
+                        variant="secondary"
+                        className="w-full"
+                        onClick={() => window.open(product.fields.amazonUrl, '_blank', 'noopener,noreferrer')}
+                      >
+                        Comprar en Amazon
+                      </Button>
+                    )}
+                  </>
                 )}
               </div>
             </form>

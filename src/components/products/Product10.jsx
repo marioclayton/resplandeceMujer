@@ -56,7 +56,12 @@ const Product10 = ({ products }) => {
                       {product.fields.productCategory}
                     </div>
                   </div>
-                  <div className="text-md font-semibold text-[#ffffff] md:text-lg">{`$${product.fields.price}`}</div>
+                  <div className="text-md font-semibold text-[#ffffff] md:text-lg">
+                    {product.fields.isFreePdf 
+                      ? <span className="text-green-300">📥 Gratis</span>
+                      : `$${product.fields.price}`
+                    }
+                  </div>
                 </Link>
               </div>
             ))
