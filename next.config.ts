@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  turbopack: {
+    // Empty turbopack config to silence the warning
+    // Most applications work fine with Turbopack with no configuration
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Handle packages that might cause SSR issues
