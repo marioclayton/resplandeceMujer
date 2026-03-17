@@ -29,7 +29,8 @@ async function getProduct(slug) {
 
 // Generate metadata for the page
 export async function generateMetadata({ params }) {
-  const product = await getProduct(params.slug);
+  const resolvedParams = await params;
+  const product = await getProduct(resolvedParams.slug);
 
   if (!product) {
     return {
@@ -46,7 +47,8 @@ export async function generateMetadata({ params }) {
 
 // Page component
 export default async function ProductPage({ params }) {
-  const product = await getProduct(params.slug);
+  const resolvedParams = await params;
+  const product = await getProduct(resolvedParams.slug);
 
   if (!product) {
     notFound();
@@ -62,12 +64,32 @@ export default async function ProductPage({ params }) {
 
 // Generate static paths
 export async function generateStaticParams() {
-  const response = await client.getEntries({ 
-    content_type: 'product',
-    limit: 100,
-  });
+  // For development, return empty array to use dynamic rendering
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Development mode: using dynamic rendering for products');
+    return [];
+  }
+  
+  try {
+    console.log('Generating static paths for products...');
+    const response = await client.getEntries({ 
+      content_type: 'product',
+      limit: 100,
+    });
 
-  return response.items.map((product) => ({
-    slug: product.fields.productSlug,
-  }));
+    console.log(`Found ${response.total} products for static generation`);
+    
+    const paths = response.items.map((product) => {
+      console.log(`Creating path for product: ${product.fields.productName} -> ${product.fields.productSlug}`);
+      return {
+        slug: product.fields.productSlug,
+      };
+    }).filter(Boolean);
+    
+    console.log('Generated product paths:', paths);
+    return paths;
+  } catch (error) {
+    console.error('Error generating static paths for products:', error);
+    return [];
+  }
 }
