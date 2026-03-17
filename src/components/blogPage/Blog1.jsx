@@ -105,7 +105,7 @@ export function Blog1({ initialPosts = [] }) {
                 currentPosts.map((post, index) => (
                   <div className="border border-border-primary rounded-4xl" key={post.sys.id}>
                     <Link
-                      href={`/blog/${post.fields.blogSlug}`}
+                      href={`/blog/${post.fields.blogSlug || post.fields.slug}`}
                       className="mb-6 inline-block w-full max-w-full"
                     >
                       <div className="w-full overflow-hidden">
@@ -131,7 +131,7 @@ export function Blog1({ initialPosts = [] }) {
                       {post.fields.blogCategories}
                     </Link>
                     <Link
-                      href={`/blog/${post.fields.blogSlug}`}
+                      href={`/blog/${post.fields.blogSlug || post.fields.slug}`}
                       className="mb-2 block max-w-full"
                     >
                       <h5 className="text-xl font-bold md:text-2xl">

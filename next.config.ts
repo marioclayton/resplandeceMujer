@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
     // Empty turbopack config to silence the warning
     // Most applications work fine with Turbopack with no configuration
   },
+  // Move contentful to external packages to help with server-side rendering
+  serverExternalPackages: ['contentful'],
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Handle packages that might cause SSR issues
