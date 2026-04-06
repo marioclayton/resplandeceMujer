@@ -102,34 +102,62 @@ export function ProductHeader1({ product }) {
                     <Button 
                       title="Descargar PDF Gratis" 
                       className="w-full"
-                      onClick={async () => {
+                      onClick={async (e) => {
                         try {
-                          // Option 1: Direct download from Contentful (current implementation)
-                          const link = document.createElement('a');
-                          link.href = `https:${pdfFile.fields.file.url}`;
-                          link.download = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
-                          link.target = '_blank';
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
-
-                          // Option 2: Use API route (uncomment to use instead)
-                          // const response = await fetch(`/api/download?productId=${productId}`);
-                          // if (response.ok) {
-                          //   const blob = await response.blob();
-                          //   const url = window.URL.createObjectURL(blob);
-                          //   const link = document.createElement('a');
-                          //   link.href = url;
-                          //   link.download = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
-                          //   document.body.appendChild(link);
-                          //   link.click();
-                          //   document.body.removeChild(link);
-                          //   window.URL.revokeObjectURL(url);
-                          // } else {
-                          //   console.error('Download failed');
-                          // }
+                          e.preventDefault();
+                          
+                          // Detect if we're on iOS/macOS Safari for special handling
+                          const isIOSorSafari = /iPad|iPhone|iPod|Safari/.test(navigator.userAgent) && 
+                                               !/Chrome|CriOS|FxiOS/.test(navigator.userAgent);
+                          
+                          if (isIOSorSafari) {
+                            // For iOS/Safari: Use API route with blob approach for better compatibility
+                            const response = await fetch(`/api/download?productId=${productId}`);
+                            
+                            if (response.ok) {
+                              const blob = await response.blob();
+                              const url = window.URL.createObjectURL(blob);
+                              const fileName = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
+                              
+                              // Create a visible anchor for iOS compatibility
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = fileName;
+                              link.style.display = 'none';
+                              
+                              document.body.appendChild(link);
+                              
+                              // Use a timeout to ensure the link is properly attached
+                              setTimeout(() => {
+                                link.click();
+                                
+                                // Clean up after a short delay
+                                setTimeout(() => {
+                                  document.body.removeChild(link);
+                                  window.URL.revokeObjectURL(url);
+                                }, 100);
+                              }, 0);
+                              
+                            } else {
+                              console.error('Download failed:', response.statusText);
+                              // Fallback to direct link for iOS if API fails
+                              window.open(`https:${pdfFile.fields.file.url}`, '_blank');
+                            }
+                          } else {
+                            // For other browsers: Direct download works fine
+                            const link = document.createElement('a');
+                            link.href = `https:${pdfFile.fields.file.url}`;
+                            link.download = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
+                            link.target = '_blank';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }
+                          
                         } catch (error) {
                           console.error('Download error:', error);
+                          // Final fallback: open in new tab
+                          window.open(`https:${pdfFile.fields.file.url}`, '_blank');
                         }
                       }}
                     >
