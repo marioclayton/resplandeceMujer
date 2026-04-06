@@ -4,7 +4,8 @@ import { Header5 } from "../components/Header5";
 import { Layout369 } from "../components/Layout369";
 import { Layout4 } from "../components/Layout4";
 
-export const revalidate = 60;
+// Revalidate every hour to reduce API usage
+export const revalidate = 3600;
 
 // Initialize Contentful client
 const client = createClient({

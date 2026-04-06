@@ -1,7 +1,8 @@
 import { createClient } from "contentful";
 import Product10 from "../../components/products/Product10";
 
-export const revalidate = 60;
+// Revalidate every hour to reduce API usage
+export const revalidate = 3600;
 
 // Initialize Contentful client
 const client = createClient({

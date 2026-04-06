@@ -3,7 +3,8 @@ import { ProductHeader1 } from '@/components/product/ProductHeader1';
 import { ProductReviews } from "@/components/product/ProductReviews";
 import { notFound } from 'next/navigation';
 
-export const revalidate = 60;
+// Revalidate every hour to reduce API usage
+export const revalidate = 3600;
 
 // Initialize Contentful client
 const client = createClient({

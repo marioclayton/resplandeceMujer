@@ -5,7 +5,8 @@ import { Testimonial5 } from "../../../components/blogPost/Testimonial5";
 import { Blog46 } from "../../../components/blogPost/Blog46";
 import { notFound } from 'next/navigation';
 
-export const revalidate = 60;
+// Revalidate every hour to reduce API usage
+export const revalidate = 3600;
 
 
 // Initialize Contentful client
