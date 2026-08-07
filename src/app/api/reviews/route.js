@@ -1,5 +1,6 @@
 import { createClient } from 'contentful-management';
 import { NextResponse } from 'next/server';
+import { cleanText, isSameSiteRequest } from '../../../lib/request-security';
 
 // Rate limiting
 const RATE_LIMIT = {};
@@ -8,6 +9,7 @@ const MAX_REQUESTS = 5;
 
 export async function POST(request) {
   try {
+    if (!isSameSiteRequest(request)) return NextResponse.json({ error: 'Request not allowed' }, { status: 403 });
     // Get client IP for rate limiting
     const ip = request.headers.get('x-forwarded-for') || 'unknown';
     
@@ -32,7 +34,11 @@ export async function POST(request) {
     }
     
     // Get request data
-    const { name, review, rating, productId } = await request.json();
+    const body = await request.json();
+    const name = cleanText(body.name, 80);
+    const review = cleanText(body.review, 2000);
+    const productId = cleanText(body.productId, 100);
+    const rating = Math.min(5, Math.max(1, Number.parseInt(body.rating, 10) || 5));
     
     // Validate required fields
     if (!name || !review || !productId) {
@@ -56,7 +62,7 @@ export async function POST(request) {
       fields: {
         name: { 'en-US': name },
         review: { 'en-US': review },
-        rating: { 'en-US': parseInt(rating) || 5 },
+        rating: { 'en-US': rating },
         productId: { 'en-US': productId },
         date: { 'en-US': new Date().toISOString() },
         isApproved: { 'en-US': false } // Start as unapproved

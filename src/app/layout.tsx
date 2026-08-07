@@ -1,89 +1,28 @@
 import type { Metadata } from "next";
 import { Cuprum, Noto_Sans } from "next/font/google";
 import "./globals.css";
-import "../lib/localStorage-polyfill"; // Import localStorage polyfill
 import { Navbar1 } from "../components/Navbar1";
 import { Footer1 } from "../components/Footer1";
-import { ClientOnly } from "../components/ClientOnly";
 import ErrorBoundary from "../components/ErrorBoundary";
-import Script from "next/script"; // <-- Import Script
+import { SiteMotion } from "../components/SiteMotion";
+import { CookieConsent } from "../components/CookieConsent";
 
-// Replace Geist with Cuprum
-const cuprum = Cuprum({
-  variable: "--font-cuprum",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-// Replace Geist Mono with Noto Sans
-const notoSans = Noto_Sans({
-  variable: "--font-noto-sans",
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  display: "swap",
-});
+const cuprum = Cuprum({ variable: "--font-cuprum", subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap" });
+const notoSans = Noto_Sans({ variable: "--font-noto-sans", subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Resplandece Mujer",
-  description: "Inspiración para mujeres de fe",
+  metadataBase: new URL("https://www.resplandecemujer.com"),
+  title: { default: "Resplandece Mujer | Crece en tu relación con Jesucristo", template: "%s | Resplandece Mujer" },
+  description: "Enseñanzas bíblicas, reflexiones y recursos para fortalecer tu fe, renovar tu esperanza y vivir el propósito de Dios en Cristo.",
+  alternates: { canonical: "./" },
+  category: "Fe cristiana y crecimiento espiritual",
+  openGraph: { type: "website", locale: "es_US", siteName: "Resplandece Mujer", title: "Resplandece Mujer | Crece en Cristo", description: "Enseñanzas bíblicas y recursos para fortalecer tu fe, renovar tu esperanza y vivir el propósito de Dios.", images: [{ url: "/og.png", width: 1536, height: 1024, alt: "Resplandece Mujer" }] },
+  twitter: { card: "summary_large_image", title: "Resplandece Mujer | Crece en Cristo", description: "Enseñanzas bíblicas y recursos para fortalecer tu fe y vivir el propósito de Dios.", images: ["/og.png"] },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="es">
-      <head>
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-YDE8BBVCB3"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            if (typeof window !== 'undefined') {
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-YDE8BBVCB3');
-            }
-          `}
-        </Script>
-        <link
-          rel="preload"
-          as="image"
-          href="/assets/pexels-kqpho-1921168.webp"
-          type="image/webp"
-        />
-        <link
-          rel="preload"
-          href="https://www.resplandecemujer.com/_next/static/media/c4250770ab8708b6-s.p.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="https://www.resplandecemujer.com/_next/static/media/c4a2af5d29d703b3-s.p.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body className={`${cuprum.variable} ${notoSans.variable} antialiased`}>
-        <ErrorBoundary>
-          <ClientOnly>
-            <Navbar1 />
-          </ClientOnly>
-          {children}
-          <ClientOnly>
-            <Footer1 />
-          </ClientOnly>
-        </ErrorBoundary>
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="es"><body className={`${cuprum.variable} ${notoSans.variable} antialiased`}>
+    <SiteMotion />
+    <ErrorBoundary><Navbar1 />{children}<Footer1 /><CookieConsent /></ErrorBoundary>
+  </body></html>;
 }

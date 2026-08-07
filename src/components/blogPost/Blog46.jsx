@@ -1,78 +1,14 @@
-"use client";
-
-import React from "react";
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
 export function Blog46({ relatedPosts }) {
-  // If no related posts provided, don't render the component
-  if (!relatedPosts || relatedPosts.length === 0) {
-    return null;
-  }
-
+  if (!relatedPosts?.length) return null;
   return (
-    <div className="darkBG py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-10 text-center">Artículos Relacionados</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-          {relatedPosts.map((relatedPost) => (
-            <div className="border border-border-primary rounded-4xl" key={relatedPost.sys.id}>
-              <Link 
-                href={`/blog/${relatedPost.fields.blogSlug}`}
-                className="mb-6 inline-block w-full max-w-full"
-              >
-                <div className="w-full overflow-hidden">
-                  {relatedPost.fields.blogImage && (
-                    <img
-                      src={`https:${relatedPost.fields.blogImage.fields.file.url}`}
-                      alt={relatedPost.fields.blogTitle || "Blog post"}
-                      className="rounded-image rounded-t-4xl aspect-[3/2] size-full object-cover"
-                    />
-                  )}
-                </div>
-              </Link>
-              
-              <div className="px-4 pb-4">
-                <Link
-                  href={`/blog/category/${relatedPost.fields.blogCategories}`}
-                  className="mb-2 mr-4 inline-block max-w-full text-sm font-semibold"
-                >
-                  {relatedPost.fields.blogCategories}
-                </Link>
-                
-                <Link
-                  href={`/blog/${relatedPost.fields.blogSlug}`}
-                  className="mb-2 block max-w-full"
-                >
-                  <h5 className="text-xl font-bold md:text-2xl">
-                    {relatedPost.fields.blogTitle}
-                  </h5>
-                </Link>
-                
-                {relatedPost.fields.blogExcerpt && (
-                  <p>{relatedPost.fields.blogExcerpt}</p>
-                )}
-                
-                <div className="mt-6 flex items-center">
-                  <div>
-                    <h6 className="text-sm font-semibold">
-                      {relatedPost.fields.blogAuthor}
-                    </h6>
-                    <div className="flex items-center">
-                      <p className="text-sm">
-                        {relatedPost.fields.blogPublishDate}
-                      </p>
-                      <span className="mx-2">•</span>
-                      <p className="text-sm">5 min lectura</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section className="border-t border-[#d8c2b5] bg-[#efe1d4] px-[5%] py-20 md:py-28">
+      <div className="container">
+        <p className="eyebrow text-[#9b5b47]">Continúa leyendo</p><h2 className="mt-4 text-5xl font-normal text-[#2f211d] md:text-6xl">Reflexiones relacionadas</h2>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">{relatedPosts.map((post) => { const raw = post.fields.blogImage?.fields?.file?.url; const src = raw?.startsWith("//") ? `https:${raw}` : raw; return <article key={post.sys.id} className="group overflow-hidden rounded-[1.75rem] bg-[#fffaf2]"><Link href={`/blog/${post.fields.blogSlug}`} className="block">{src && <div className="relative aspect-[3/2] overflow-hidden"><Image src={src} alt={post.fields.blogTitle} fill className="object-cover transition duration-700 group-hover:scale-[1.04]" sizes="(max-width: 768px) 100vw, 33vw" /></div>}<div className="p-6"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#9b5b47]">{post.fields.blogCategories}</p><h3 className="mt-3 text-3xl font-normal leading-tight text-[#2f211d] group-hover:text-[#9b5b47]">{post.fields.blogTitle}</h3><p className="mt-3 line-clamp-2 leading-7 text-[#66544d]">{post.fields.blogExcerpt}</p></div></Link></article>; })}</div>
       </div>
-    </div>
+    </section>
   );
 }

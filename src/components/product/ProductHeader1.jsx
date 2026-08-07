@@ -1,234 +1,31 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  Button,
-} from "@relume_io/relume-ui";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
 import { useAverageRating } from "./ProductReviews";
 
-const Star = ({ rating }) => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0;
-  return (
-    <div className="flex items-center gap-1">
-      {[...Array(5)].map((_, i) => {
-        const isFullStar = i < fullStars;
-        const isHalfStar = hasHalfStar && i === fullStars;
-
-        return (
-          <div key={i}>
-            {isFullStar ? (
-              <BiSolidStar />
-            ) : isHalfStar ? (
-              <BiSolidStarHalf />
-            ) : (
-              <BiStar />
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+function Stars({ rating }) {
+  const full = Math.floor(rating);
+  const half = rating % 1 !== 0;
+  return <div className="flex gap-1" aria-label={`${rating} de 5 estrellas`}>{Array.from({ length: 5 }, (_, index) => index < full ? <BiSolidStar key={index} /> : half && index === full ? <BiSolidStarHalf key={index} /> : <BiStar key={index} />)}</div>;
+}
 
 export function ProductHeader1({ product }) {
   if (!product) return null;
-
-  const {
-    productName,
-    productImage,
-    productDescription,
-    price,
-    productCategory,
-    externalUrl,
-    isFreePdf,
-    pdfFile,
-  } = product.fields;
-  
-  // Get system ID for the product
+  const { productName, productImage, productDescription, price, productCategory, externalUrl, isFreePdf, pdfFile, amazonUrl } = product.fields;
   const productId = product.sys?.id;
-  
-  // Get the average rating using our custom hook
   const { averageRating, reviewCount } = useAverageRating(productId);
+  const rawImage = productImage?.fields?.file?.url;
+  const imageUrl = rawImage?.startsWith("//") ? `https:${rawImage}` : rawImage;
 
-  return (
-    <header id="relume" className="darkBG px-[5%] py-12 md:py-16 lg:py-20">
-      <div className="container">
-        <div className="grid grid-cols-1 gap-y-8 md:gap-y-10 lg:grid-cols-[1fr_1.5fr] lg:gap-x-20">
-          {/* Product image container with top alignment */}
-          <div className="flex justify-center items-start overflow-hidden pt-1">
-            {productImage?.fields?.file?.url ? (
-              <img
-                src={productImage.fields.file.url}
-                alt={productName || "Product image"}
-                className="aspect-[5/6] max-w-full max-h-[500px] object-contain rounded-lg"
-              />
-            ) : (
-              <div className="aspect-[5/6] max-w-full max-h-[500px] bg-gray-200 flex items-center justify-center rounded-lg">
-                <p className="text-gray-500">No image available</p>
-              </div>
-            )}
-          </div>
-          <div>
-            <h1 className="mb-2 text-4xl leading-[1.2] font-bold md:text-5xl lg:text-6xl">
-              {productName || "Untitled Product"}
-            </h1>
-            <p className="mb-5 text-xl font-bold md:mb-6 md:text-2xl">
-              {isFreePdf ? 'Gratis' : `$${price || "0"}`}
-            </p>
-            <div className="mb-5 flex flex-wrap items-center gap-3 md:mb-6">
-              <Star rating={parseFloat(averageRating) || 0} />
-              <p className="text-sm">
-                ({averageRating} estrellas) • {reviewCount} {reviewCount === 1 ? 'opinión' : 'opiniones'}
-              </p>
-            </div>
-            <div className="mb-5 md:mb-6">
-              {productDescription ? documentToReactComponents(productDescription) : (
-                <p className="text-gray-500">No description available</p>
-              )}
-            </div>
-            <form className="mb-8">
-              <div className="mt-8 mb-4 flex flex-col gap-y-4">
-                {/* Conditional rendering based on product type */}
-                {isFreePdf ? (
-                  // Free PDF Download Button
-                  pdfFile && (
-                    <Button 
-                      title="Descargar PDF Gratis" 
-                      className="w-full"
-                      onClick={async (e) => {
-                        try {
-                          e.preventDefault();
-                          
-                          // Detect if we're on iOS/macOS Safari for special handling
-                          const isIOSorSafari = /iPad|iPhone|iPod|Safari/.test(navigator.userAgent) && 
-                                               !/Chrome|CriOS|FxiOS/.test(navigator.userAgent);
-                          
-                          if (isIOSorSafari) {
-                            // For iOS/Safari: Use API route with blob approach for better compatibility
-                            const response = await fetch(`/api/download?productId=${productId}`);
-                            
-                            if (response.ok) {
-                              const blob = await response.blob();
-                              const url = window.URL.createObjectURL(blob);
-                              const fileName = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
-                              
-                              // Create a visible anchor for iOS compatibility
-                              const link = document.createElement('a');
-                              link.href = url;
-                              link.download = fileName;
-                              link.style.display = 'none';
-                              
-                              document.body.appendChild(link);
-                              
-                              // Use a timeout to ensure the link is properly attached
-                              setTimeout(() => {
-                                link.click();
-                                
-                                // Clean up after a short delay
-                                setTimeout(() => {
-                                  document.body.removeChild(link);
-                                  window.URL.revokeObjectURL(url);
-                                }, 100);
-                              }, 0);
-                              
-                            } else {
-                              console.error('Download failed:', response.statusText);
-                              // Fallback to direct link for iOS if API fails
-                              window.open(`https:${pdfFile.fields.file.url}`, '_blank');
-                            }
-                          } else {
-                            // For other browsers: Direct download works fine
-                            const link = document.createElement('a');
-                            link.href = `https:${pdfFile.fields.file.url}`;
-                            link.download = pdfFile.fields.file.fileName || `${productName || 'product'}.pdf`;
-                            link.target = '_blank';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                          }
-                          
-                        } catch (error) {
-                          console.error('Download error:', error);
-                          // Final fallback: open in new tab
-                          window.open(`https:${pdfFile.fields.file.url}`, '_blank');
-                        }
-                      }}
-                    >
-                      Descargar PDF Gratis
-                    </Button>
-                  )
-                ) : (
-                  // Paid Product Buttons (existing functionality)
-                  <>
-                    {externalUrl && (
-                      <Button 
-                        title="Comprar en Hotmart" 
-                        className="w-full"
-                        onClick={() => window.open(externalUrl, '_blank', 'noopener,noreferrer')}
-                      >
-                        Comprar en Hotmart
-                      </Button>
-                    )}
-                    
-                    {product.fields.amazonUrl && (
-                      <Button
-                        title="Comprar en Amazon"
-                        variant="secondary"
-                        className="w-full"
-                        onClick={() => window.open(product.fields.amazonUrl, '_blank', 'noopener,noreferrer')}
-                      >
-                        Comprar en Amazon
-                      </Button>
-                    )}
-                  </>
-                )}
-              </div>
-            </form>
-            <Accordion type="multiple">
-              <AccordionItem value="item-0">
-                <AccordionTrigger className="py-4 font-semibold md:text-md [&_svg]:size-6">
-                  Detalles
-                </AccordionTrigger>
-                <AccordionContent className="md:pb-6">
-                  Si no estás completamente satisfecha con tu compra, puedes
-                  devolver el producto en un plazo de 30 días. Asegúrate de que
-                  esté en su estado original. Consulta nuestra política de
-                  devoluciones para más detalles.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="py-4 font-semibold md:text-md [&_svg]:size-6">
-                  Envío
-                </AccordionTrigger>
-                <AccordionContent className="md:pb-6">
-                  Si no estás completamente satisfecha con tu compra, puedes
-                  devolver el producto en un plazo de 30 días. Asegúrate de que
-                  esté en su estado original. Consulta nuestra política de
-                  devoluciones para más detalles.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger className="py-4 font-semibold md:text-md [&_svg]:size-6">
-                  Devoluciones
-                </AccordionTrigger>
-                <AccordionContent className="md:pb-6">
-                  Si no estás completamente satisfecha con tu compra, puedes
-                  devolver el producto en un plazo de 30 días. Asegúrate de que
-                  esté en su estado original. Consulta nuestra política de
-                  devoluciones para más detalles.
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
+  return <header className="bg-[#f8f2e9] px-[5%] pb-20 pt-36 md:pb-28 md:pt-44"><div className="container"><div className="grid items-start gap-10 lg:grid-cols-[.9fr_1.1fr] lg:gap-x-20">
+    <div className="flex items-start justify-center overflow-hidden rounded-[2rem] border border-[#e0cec2] bg-[#efe1d4] p-6 shadow-[0_18px_50px_rgba(72,44,35,.08)]">{imageUrl ? <Image src={imageUrl} alt={productName || "Recurso de Resplandece Mujer"} width={700} height={840} className="aspect-[5/6] max-h-[560px] w-auto rounded-[1.25rem] object-contain" priority /> : <div className="flex aspect-[5/6] items-center justify-center text-[#8a746b]">Imagen próximamente</div>}</div>
+    <div className="pt-2"><p className="eyebrow mb-5 text-[#9b5b47]">{productCategory || "Recurso para tu camino"}</p><h1 className="max-w-2xl text-[clamp(2.85rem,5.5vw,5rem)] font-normal leading-[1.02] tracking-[-.025em] text-[#2f211d]">{productName}</h1><p className="mt-6 text-xl font-semibold text-[#7d4032] md:text-2xl">{isFreePdf ? "Gratis" : `$${price || "0"}`}</p>
+      <div className="mt-5 flex flex-wrap items-center gap-3 text-[#b9694f]"><Stars rating={Number.parseFloat(averageRating) || 0} /><p className="text-sm text-[#8a746b]">{reviewCount ? `${averageRating} · ${reviewCount} ${reviewCount === 1 ? "opinión" : "opiniones"}` : "Aún sin opiniones"}</p></div>
+      <div className="mt-7 space-y-4 text-lg leading-8 text-[#55433c]">{productDescription ? documentToReactComponents(productDescription) : <p>Una herramienta creada para acompañar tu crecimiento espiritual.</p>}</div>
+      <div className="mb-9 mt-8 flex flex-col gap-3">{isFreePdf && pdfFile && <a href={`/api/download?productId=${encodeURIComponent(productId)}`} className="button button-clay w-full">Descargar PDF gratis</a>}{!isFreePdf && externalUrl && <a href={externalUrl} target="_blank" rel="noopener noreferrer sponsored" className="button button-clay w-full">Comprar en Hotmart</a>}{!isFreePdf && amazonUrl && <a href={amazonUrl} target="_blank" rel="noopener noreferrer sponsored" className="button secondaryButton w-full">Comprar en Amazon</a>}</div>
+      <div className="divide-y divide-[#d8c2b5] border-y border-[#d8c2b5]"><details className="group"><summary className="flex cursor-pointer list-none justify-between py-5 font-semibold">Sobre este recurso <span className="text-xl transition group-open:rotate-45">+</span></summary><p className="pb-6 leading-7 text-[#66544d]">Úsalo a tu ritmo como apoyo para la reflexión, la escritura y la oración personal.</p></details><details className="group"><summary className="flex cursor-pointer list-none justify-between py-5 font-semibold">Descarga y soporte <span className="text-xl transition group-open:rotate-45">+</span></summary><p className="pb-6 leading-7 text-[#66544d]">Si tienes dificultades para acceder al material, escríbenos desde la página de contacto.</p></details></div>
+    </div>
+  </div></div></header>;
 }

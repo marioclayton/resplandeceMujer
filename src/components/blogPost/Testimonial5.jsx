@@ -145,11 +145,12 @@ export function Testimonial5({ postSlug }) {
   };
 
   return (
-    <section id="testimonials" className="darkBG px-[5%] py-16 md:py-24 lg:py-28">
+    <section id="testimonials" className="border-t border-[#d8c2b5] bg-[#fffaf2] px-[5%] py-20 text-[#2f211d] md:py-28">
       <div className="container">
         {/* Title section */}
         <div className="mb-12 w-full md:mb-18 lg:mb-20">
-          <h2 className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl">
+          <p className="eyebrow mb-4 text-[#9b5b47]">Conversación</p>
+          <h2 className="mb-5 text-5xl font-normal text-[#2f211d] md:mb-6 md:text-6xl">
             Testimonios de lectoras
           </h2>
           <div className="flex justify-between items-center">
@@ -168,8 +169,8 @@ export function Testimonial5({ postSlug }) {
         </div>
         
         {/* Comment form */}
-        <div className="mb-16 p-6 border border-border-primary rounded-4xl">
-          <h3 className="text-2xl font-bold mb-4">Deja tu comentario</h3>
+        <div className="mb-16 rounded-[2rem] border border-[#e0cec2] bg-[#f8f2e9] p-7 md:p-10">
+          <h3 className="mb-6 text-3xl font-normal text-[#2f211d]">Deja tu comentario</h3>
           
           {submitSuccess && (
             <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -191,7 +192,7 @@ export function Testimonial5({ postSlug }) {
               <input
                 type="text"
                 id="name"
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#501E16]"
+                className="w-full rounded-2xl border border-[#d8c2b5] bg-[#fffdf8] p-3.5 text-[#2f211d] focus:ring-2 focus:ring-[#9b5b47]"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -227,7 +228,7 @@ export function Testimonial5({ postSlug }) {
               <textarea
                 id="comment"
                 rows="4"
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#501E16]"
+                className="w-full rounded-2xl border border-[#d8c2b5] bg-[#fffdf8] p-3.5 text-[#2f211d] focus:ring-2 focus:ring-[#9b5b47]"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 required
@@ -237,7 +238,7 @@ export function Testimonial5({ postSlug }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-3 bg-[#501E16] text-white rounded hover:bg-[#401810] transition-colors disabled:opacity-50"
+              className="button button-clay disabled:opacity-50"
             >
               {isSubmitting ? "Enviando..." : "Enviar comentario"}
             </button>
@@ -262,7 +263,7 @@ export function Testimonial5({ postSlug }) {
         ) : testimonials.length > 0 ? (
           <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-16">
             {testimonials.map((testimonial, index) => (
-              <div key={testimonial.id || index} className="flex h-full max-w-lg flex-col items-start justify-start text-left border border-border-primary rounded-4xl p-6">
+              <div key={testimonial.id || index} className="flex h-full max-w-lg flex-col items-start justify-start rounded-[1.75rem] border border-[#e0cec2] bg-[#f8f2e9] p-7 text-left">
                 <div className="mb-6 flex md:mb-8">
                   {[...Array(5)].map((_, i) => (
                     <BiSolidStar 

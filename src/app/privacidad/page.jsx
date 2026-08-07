@@ -1,11 +1,20 @@
-import React from "react";
-import { Privacidad } from "../../components/privacidad/privacidad";
+import Link from "next/link";
 
-export default function Page() {
-  return (
-    <div>
-      
-      <Privacidad />
-    </div>
-  );
+export const metadata = { title: "Privacidad y cookies", description: "Cómo Resplandece Mujer recopila, utiliza y protege los datos personales de sus visitantes.", alternates: { canonical: "/privacidad" } };
+
+const Section = ({ id, title, children }) => <section id={id} className="scroll-mt-28 border-t border-[#d8c2b5] py-8"><h2 className="text-3xl font-normal text-[#2f211d]">{title}</h2><div className="mt-4 space-y-4 leading-7 text-[#66544d]">{children}</div></section>;
+
+export default function PrivacidadPage() {
+  return <main className="bg-[#f8f2e9] px-[5%] pb-20 pt-36 md:pb-28 md:pt-44"><div className="container max-w-4xl">
+    <header className="mb-12"><p className="eyebrow text-[#9b5b47]">Información legal</p><h1 className="mt-5 text-[clamp(2.85rem,6.5vw,5.75rem)] font-normal leading-[1.02]">Privacidad y cookies</h1><p className="mt-5 text-[#8a746b]">Última actualización: 6 de agosto de 2026</p><p className="mt-6 max-w-3xl text-lg leading-8 text-[#66544d]">Esta política explica qué información tratamos cuando visitas Resplandece Mujer, te suscribes, escribes un mensaje, comentas o descargas un recurso.</p></header>
+    <Section title="Responsable y contacto"><p>Resplandece Mujer es responsable del tratamiento descrito aquí. El proyecto mantiene anónima la identidad pública de su autora, pero puedes ejercer tus derechos o hacer preguntas escribiendo a <a className="font-semibold text-[#7d4032] underline" href="mailto:resplandecemujer4@gmail.com">resplandecemujer4@gmail.com</a>.</p></Section>
+    <Section title="Datos que recopilamos"><ul className="list-disc space-y-2 pl-6"><li>Nombre, correo, asunto y mensaje cuando utilizas el formulario de contacto.</li><li>Nombre, comentario o reseña, puntuación y fecha cuando participas en la comunidad.</li><li>Correo electrónico y preferencias cuando te suscribes al boletín.</li><li>Datos técnicos y de uso —como dirección IP aproximada, dispositivo, navegador y páginas visitadas— solo si aceptas Analytics.</li></ul><p>No solicitamos datos sensibles, información financiera ni contraseñas.</p></Section>
+    <Section title="Para qué y con qué fundamento los usamos"><ul className="list-disc space-y-2 pl-6"><li>Responder solicitudes y prestar los recursos que pides.</li><li>Gestionar comentarios y reseñas, sujetos a moderación.</li><li>Enviar el boletín cuando das tu consentimiento; puedes retirarlo en cualquier momento.</li><li>Medir y mejorar el sitio cuando aceptas cookies analíticas.</li><li>Prevenir abuso y mantener la seguridad del servicio.</li></ul></Section>
+    <Section id="cookies" title="Cookies y preferencias"><p>Las cookies necesarias permiten recordar tu elección de privacidad. Google Analytics es opcional y no se carga hasta que eliges “Aceptar”. Si rechazas, el sitio seguirá funcionando. Puedes cambiar tu elección borrando el almacenamiento del sitio en tu navegador y recargando la página.</p><p>Analytics puede medir páginas visitadas, duración aproximada y datos técnicos. Google actúa como proveedor tecnológico conforme a sus propios términos y políticas.</p></Section>
+    <Section title="Proveedores y transferencias"><p>Usamos Contentful para alojar contenido y comentarios, Google Analytics para medición opcional, Mailchimp para el boletín, Gmail para recibir mensajes, Vercel para alojamiento y enlaces externos de Hotmart o Amazon cuando corresponda. Estos proveedores pueden procesar datos en otros países y aplican sus propias salvaguardas contractuales.</p><p>No vendemos tus datos personales.</p></Section>
+    <Section title="Conservación"><p>Conservamos consultas solo mientras sean necesarias para responder y mantener registros razonables; suscripciones hasta que te des de baja; comentarios y reseñas mientras estén publicados o sean necesarios para moderación; y datos técnicos según la configuración de retención del proveedor. Después los eliminamos o anonimizamos cuando sea razonablemente posible.</p></Section>
+    <Section title="Tus derechos"><p>Según dónde vivas, puedes solicitar acceso, corrección, eliminación, portabilidad, limitación u oposición al tratamiento, retirar tu consentimiento y presentar una reclamación ante tu autoridad de protección de datos. Para solicitarlo, escribe al correo indicado arriba. Podremos pedir información razonable para verificar la solicitud.</p></Section>
+    <Section title="Seguridad y menores"><p>Aplicamos controles técnicos y organizativos razonables, pero ningún sistema en internet puede garantizar seguridad absoluta. El sitio está dirigido a una audiencia general adulta y no pretende recopilar conscientemente datos de menores de 13 años. Si crees que un menor nos proporcionó información, contáctanos para eliminarla.</p></Section>
+    <Section title="Cambios"><p>Podemos actualizar esta política cuando cambien el sitio, los proveedores o la ley. Publicaremos la nueva fecha en esta página. Consulta también nuestros <Link className="font-semibold text-[#7d4032] underline" href="/terminos">Términos de uso</Link> y <Link className="font-semibold text-[#7d4032] underline" href="/aviso-legal">Aviso legal</Link>.</p></Section>
+  </div></main>;
 }

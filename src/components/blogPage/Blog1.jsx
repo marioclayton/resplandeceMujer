@@ -1,228 +1,116 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+const postsPerPage = 12;
 
 export function Blog1({ initialPosts = [] }) {
-  const [posts, setPosts] = useState(initialPosts);
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
-  const [error, setError] = useState(null);
-  
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 12; // Changed to show 4 rows × 3 columns
+  const categories = [...new Set(initialPosts.map((post) => post.fields.blogCategories).filter(Boolean))];
+  const filteredPosts = activeCategory === "all" ? initialPosts : initialPosts.filter((post) => post.fields.blogCategories === activeCategory);
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const currentPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
-  useEffect(() => {
-    // Extract categories from posts
-    const allCategories = initialPosts.map(
-      (post) => post.fields.blogCategories
-    );
-    const uniqueCategories = [...new Set(allCategories)];
-    setCategories(uniqueCategories);
-  }, [initialPosts]);
-  
-  // Reset to first page when category changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeCategory]);
-
-  // Filter posts by selected category
-  const filteredByCategory =
-    activeCategory === "all"
-      ? posts
-      : posts.filter((post) => post.fields.blogCategories === activeCategory);
-      
-  // Calculate pagination
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredByCategory.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filteredByCategory.length / postsPerPage);
-  
-  // Handle page changes
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  useEffect(() => setCurrentPage(1), [activeCategory]);
 
   return (
-    <section id="relume" className="darkBG px-[5%] py-16 md:py-24 lg:py-28">
+    <section id="blog" className="bg-[#f8f2e9] px-[5%] pb-20 pt-36 md:pb-28 md:pt-44">
       <div className="container">
-        <div className="md:mb-18 mb-12 lg:mb-20">
-          <div className="mx-auto w-full max-w-lg text-center">
-            <p className="mb-3 font-semibold md:mb-4">Blog</p>
-            <h1 className="lg:text-10xl mb-5 text-6xl font-bold md:mb-6 md:text-9xl">
+        <header className="mb-14 border-b border-[#d8c2b5] pb-14 text-center md:mb-20 md:pb-20">
+          <div className="mx-auto max-w-3xl">
+            <p className="eyebrow mb-5 text-[#9b5b47]">Reflexiones para tu camino</p>
+            <h1 className="text-[clamp(2.85rem,6.5vw,5.75rem)] font-normal leading-[1.02] tracking-[-.025em] text-[#2f211d]">
               Descubre el poder transformador de la fe
             </h1>
-            <p className="md:text-md">
-              Explora nuestros artículos más destacados y enriquecedores.
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-[#66544d]">
+              Historias, enseñanzas y pausas de reflexión para fortalecer tu fe y vivir con mayor intención.
             </p>
           </div>
+        </header>
+
+        <section className="mb-16 grid gap-8 md:grid-cols-[.9fr_1.1fr] md:items-start lg:mb-20 lg:gap-16" aria-labelledby="blog-intro-title">
+          <div>
+            <p className="eyebrow text-[#9b5b47]">Un espacio para volver a lo esencial</p>
+            <h2 id="blog-intro-title" className="mt-4 text-4xl font-normal leading-tight text-[#2f211d] md:text-5xl">
+              Fe para los días luminosos y también para los difíciles.
+            </h2>
+          </div>
+          <div className="space-y-5 text-lg leading-8 text-[#66544d]">
+            <p>
+              En este blog encontrarás reflexiones bíblicas y conversaciones honestas sobre identidad, familia, bienestar emocional y crecimiento personal. Cada artículo nace con una intención sencilla: acompañarte a mirar tu vida con esperanza y responder a ella con sabiduría.
+            </p>
+            <p>
+              No necesitas leerlo todo de una vez. Elige la categoría que se parezca a tu temporada, guarda aquello que quieras meditar y regresa cuando necesites una pausa. Queremos que estas palabras se conviertan en compañía práctica, no solamente en inspiración momentánea.
+            </p>
+          </div>
+        </section>
+
+        <div className="mb-14 grid gap-px overflow-hidden rounded-[1.75rem] bg-[#d8c2b5] sm:grid-cols-3">
+          <div className="bg-[#efe1d4] p-6"><p className="text-sm font-bold text-[#7d4032]">Para fortalecer tu fe</p><p className="mt-2 text-sm leading-6 text-[#66544d]">Enseñanzas que conectan la Palabra con las preguntas de cada día.</p></div>
+          <div className="bg-[#efe1d4] p-6"><p className="text-sm font-bold text-[#7d4032]">Para cuidar tu interior</p><p className="mt-2 text-sm leading-6 text-[#66544d]">Reflexiones sobre emociones, descanso, identidad y relaciones saludables.</p></div>
+          <div className="bg-[#efe1d4] p-6"><p className="text-sm font-bold text-[#7d4032]">Para vivir con propósito</p><p className="mt-2 text-sm leading-6 text-[#66544d]">Ideas sencillas que te ayudan a convertir lo aprendido en pasos concretos.</p></div>
         </div>
 
-        {isLoading ? (
-          <div className="flex justify-center">
-            <p>Cargando artículos...</p>
-          </div>
-        ) : error ? (
-          <div className="flex justify-center">
-            <p className="text-red-500">{error}</p>
-          </div>
-        ) : (
-          <div className="flex flex-col justify-start">
-            {/* Categories Filter - Updated for Multiple Rows */}
-            <div className="mb-12 flex flex-wrap gap-2 justify-center">
-              <button
-                onClick={() => setActiveCategory("all")}
-                className={`rounded-button inline-flex gap-3 items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border px-4 py-2 mb-2 ${
-                  activeCategory === "all"
-                    ? "text-text-primary bg-background-primary border-border-primary"
-                    : "text-text-primary gap-2 bg-transparent border-transparent"
-                }`}
-              >
-                Ver todo
-              </button>
+        <div className="mb-14 flex flex-wrap justify-center gap-2" aria-label="Filtrar artículos por categoría">
+          {[{ label: "Ver todo", value: "all" }, ...categories.map((category) => ({ label: category, value: category }))].map(({ label, value }) => (
+            <button
+              key={value}
+              onClick={() => setActiveCategory(value)}
+              className={`rounded-full border px-5 py-2.5 text-sm ${activeCategory === value ? "border-[#9b5b47] bg-[#9b5b47] text-white" : "border-[#d8c2b5] text-[#66544d] hover:border-[#9b5b47] hover:text-[#7d4032]"}`}
+              aria-pressed={activeCategory === value}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
-              {categories.map((category, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveCategory(category)}
-                  className={`rounded-button inline-flex items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border px-4 py-2 mb-2 ${
-                    activeCategory === category
-                      ? "text-text-primary bg-background-primary border-border-primary"
-                      : "text-text-primary gap-2 bg-transparent border-transparent"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-
-            {/* Blog Posts Grid */}
-            <div className="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-2 md:gap-y-16 lg:grid-cols-3">
-              {currentPosts.length > 0 ? (
-                currentPosts.map((post, index) => (
-                  <div className="border border-border-primary rounded-4xl" key={post.sys.id}>
-                    <Link
-                      href={`/blog/${post.fields.blogSlug || post.fields.slug}`}
-                      className="mb-6 inline-block w-full max-w-full"
-                    >
-                      <div className="w-full overflow-hidden">
-                        <Image
-                          src={
-                            post.fields.blogImage.fields.file.url.startsWith("//")
-                              ? "https:" + post.fields.blogImage.fields.file.url
-                              : post.fields.blogImage.fields.file.url
-                          }
-                          alt={post.fields.blogTitle}
-                          width={800}
-                          height={600}
-                          className="rounded-image rounded-t-4xl aspect-[3/2] size-full object-cover"
-                          priority={index < 3} // Only for the first row (3 images)
-                        />
+        {currentPosts.length ? (
+          <div className="grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+            {currentPosts.map((post, index) => {
+              const slug = post.fields.blogSlug || post.fields.slug;
+              const fileUrl = post.fields.blogImage?.fields?.file?.url;
+              const imageUrl = fileUrl?.startsWith("//") ? `https:${fileUrl}` : fileUrl;
+              return (
+                <article key={post.sys.id} className="group overflow-hidden rounded-[1.75rem] border border-[#e0cec2] bg-[#fffaf2] shadow-[0_12px_35px_rgba(72,44,35,.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(72,44,35,.1)]">
+                  <Link href={`/blog/${slug}`} className="block">
+                    {imageUrl && (
+                      <div className="overflow-hidden">
+                        <Image src={imageUrl} alt={post.fields.blogTitle || "Artículo de Resplandece Mujer"} width={800} height={600} className="aspect-[3/2] w-full object-cover transition duration-700 group-hover:scale-[1.04]" priority={index < 3} />
                       </div>
-                    </Link>
-                    <div className="px-4 pb-4">
-                    <Link
-                      href={`/blog/category/${post.fields.blogCategories}`}
-                      className="mb-2 mr-4 inline-block max-w-full text-sm font-semibold"
-                    >
-                      {post.fields.blogCategories}
-                    </Link>
-                    <Link
-                      href={`/blog/${post.fields.blogSlug || post.fields.slug}`}
-                      className="mb-2 block max-w-full"
-                    >
-                      <h5 className="text-xl font-bold md:text-2xl">
-                        {post.fields.blogTitle}
-                      </h5>
-                    </Link>
-                    <p>{post.fields.blogExcerpt}</p>
-                    <div className="mt-6 flex items-center">
-                      <div>
-                        <h6 className="text-sm font-semibold">
-                          {post.fields.blogAuthor}
-                        </h6>
-                        <div className="flex items-center">
-                          <p className="text-sm">
-                            {post.fields.blogPublishDate}
-                          </p>
-                          <span className="mx-2">•</span>
-                          <p className="text-sm">5 min lectura</p>
-                        </div>
+                    )}
+                    <div className="px-6 pb-7 pt-6">
+                      <p className="mb-3 text-xs font-bold uppercase tracking-[.14em] text-[#9b5b47]">{post.fields.blogCategories}</p>
+                      <h2 className="text-3xl font-normal leading-tight text-[#2f211d] transition group-hover:text-[#9b5b47]">{post.fields.blogTitle}</h2>
+                      <p className="mt-3 line-clamp-3 leading-7 text-[#66544d]">{post.fields.blogExcerpt}</p>
+                      <div className="mt-6 flex items-center justify-between border-t border-[#eadbd1] pt-4 text-xs text-[#8a746b]">
+                        <span>{post.fields.blogPublishDate}</span><span>5 min de lectura</span>
                       </div>
                     </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="col-span-3 text-center">
-                  No hay artículos en esta categoría.
-                </p>
-              )}
-            </div>
-            
-            {/* Pagination Controls */}
-            {filteredByCategory.length > postsPerPage && (
-              <div className="flex justify-center mt-12 space-x-2">
-                <button
-                  onClick={prevPage}
-                  disabled={currentPage === 1}
-                  className={`px-4 py-2 border rounded ${
-                    currentPage === 1 
-                      ? 'opacity-50 cursor-not-allowed' 
-                      : 'hover:bg-[#333] transition-colors'
-                  }`}
-                >
-                  &larr; Anterior
-                </button>
-                
-                {[...Array(totalPages)].map((_, i) => {
-                  const pageNum = i + 1;
-                  // Show limited page numbers with ellipsis
-                  if (
-                    pageNum === 1 || 
-                    pageNum === totalPages ||
-                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                  ) {
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => paginate(pageNum)}
-                        className={`px-4 py-2 border rounded ${
-                          currentPage === pageNum 
-                            ? 'bg-[#501E16] text-white' 
-                            : 'hover:bg-[#333] transition-colors'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  } else if (
-                    (pageNum === currentPage - 2 && currentPage > 3) ||
-                    (pageNum === currentPage + 2 && currentPage < totalPages - 2)
-                  ) {
-                    return <span key={pageNum} className="px-2 py-2">...</span>;
-                  }
-                  return null;
-                })}
-                
-                <button
-                  onClick={nextPage}
-                  disabled={currentPage === totalPages}
-                  className={`px-4 py-2 border rounded ${
-                    currentPage === totalPages 
-                      ? 'opacity-50 cursor-not-allowed' 
-                      : 'hover:bg-[#333] transition-colors'
-                  }`}
-                >
-                  Siguiente &rarr;
-                </button>
-              </div>
-            )}
+                  </Link>
+                </article>
+              );
+            })}
           </div>
+        ) : <p className="py-16 text-center text-[#66544d]">No hay artículos en esta categoría.</p>}
+
+        {totalPages > 1 && (
+          <nav className="mt-16 flex flex-wrap items-center justify-center gap-2" aria-label="Paginación del blog">
+            <button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className="rounded-full border border-[#d8c2b5] px-4 py-2 text-sm text-[#66544d] disabled:cursor-not-allowed disabled:opacity-40">← Anterior</button>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+              <button key={page} onClick={() => setCurrentPage(page)} aria-current={currentPage === page ? "page" : undefined} className={`flex h-10 min-w-10 items-center justify-center rounded-full border text-sm ${currentPage === page ? "border-[#9b5b47] bg-[#f8f2e9] font-bold text-[#7d4032]" : "border-transparent text-[#66544d] hover:border-[#d8c2b5] hover:bg-[#efe1d4]"}`}>{page}</button>
+            ))}
+            <button onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))} disabled={currentPage === totalPages} className="rounded-full border border-[#d8c2b5] px-4 py-2 text-sm text-[#66544d] disabled:cursor-not-allowed disabled:opacity-40">Siguiente →</button>
+          </nav>
         )}
+
+        <section className="mt-20 rounded-[2rem] bg-[#3c211b] px-7 py-12 text-center text-[#fff8ef] md:px-12 md:py-16">
+          <p className="eyebrow text-[#e2ad94]">Lee a tu propio ritmo</p>
+          <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-normal leading-tight text-[#fff8ef] md:text-5xl">Una reflexión puede ser el comienzo de una conversación más profunda con Dios.</h2>
+          <p className="mx-auto mt-5 max-w-2xl leading-7 text-[#ddcbc1]">Haz una pausa antes de continuar con tu día. Anota una frase, comparte el artículo con una amiga o llévalo a tu tiempo de oración.</p>
+        </section>
       </div>
     </section>
   );

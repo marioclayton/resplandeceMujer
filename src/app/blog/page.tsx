@@ -3,6 +3,12 @@ import { Blog1 } from "../../components/blogPage/Blog1";
 import { Faq3 } from "../../components/blogPage/Faq3";
 import { createClient } from 'contentful';
 
+export const metadata = {
+  title: "Blog de fe y crecimiento personal",
+  description: "Reflexiones bíblicas sobre identidad, familia, bienestar emocional y propósito para acompañar tu vida cotidiana.",
+  alternates: { canonical: "/blog" },
+};
+
 // Revalidate every hour to reduce API usage
 export const revalidate = 3600;
 
@@ -21,7 +27,9 @@ async function getBlogPosts(sortOrder = 'desc') {
     const response = await client.getEntries({
       content_type: "blogPost",
       order: [`${orderPrefix}fields.blogPublishDate`],
-      include: 10,
+      include: 1,
+      limit: 200,
+      select: ['sys.id', 'fields.blogTitle', 'fields.blogSlug', 'fields.blogImage', 'fields.blogExcerpt', 'fields.blogAuthor', 'fields.blogPublishDate', 'fields.blogCategories'],
     });
     
     // Rest of your function remains the same...
@@ -48,7 +56,6 @@ async function getBlogPosts(sortOrder = 'desc') {
       });
     }
     
-    console.log(`Fetched ${posts?.length || 0} blog posts`);
     return posts;
   } catch (error) {
     console.error("Error fetching blog posts:", error);

@@ -4,6 +4,7 @@ import { Content27 } from "../../../components/blogPost/Content27";
 import { Testimonial5 } from "../../../components/blogPost/Testimonial5";
 import { Blog46 } from "../../../components/blogPost/Blog46";
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
 // Revalidate every hour to reduce API usage
 export const revalidate = 3600;
@@ -45,7 +46,7 @@ async function debugContentful() {
 }
 
 // Fetch blog post data
-async function getBlogPost(slug) {
+const getBlogPost = cache(async function getBlogPost(slug) {
   console.log('=== getBlogPost CALLED WITH SLUG:', slug, '===');
   
   if (!slug) {
@@ -163,7 +164,7 @@ async function getBlogPost(slug) {
     console.error('Error fetching blog post:', error);
     return null;
   }
-}
+});
 
 // Fetch related posts from server component
 async function getRelatedPosts(currentPost) {
@@ -213,6 +214,14 @@ export async function generateMetadata({ params }) {
   return {
     title: blogPost.fields.blogTitle || blogPost.fields.title || 'Blog Post',
     description: blogPost.fields.blogExcerpt || blogPost.fields.excerpt || `Blog post: ${blogPost.fields.blogTitle || blogPost.fields.title}`,
+    alternates: { canonical: `/blog/${encodeURIComponent(slug)}` },
+    openGraph: {
+      type: 'article',
+      title: blogPost.fields.blogTitle,
+      description: blogPost.fields.blogExcerpt,
+      publishedTime: blogPost.fields.blogPublishDate,
+      images: blogPost.fields.blogImage?.fields?.file?.url ? [`https:${blogPost.fields.blogImage.fields.file.url}`] : ['/og.png'],
+    },
   };
 }
 
@@ -242,7 +251,16 @@ export default async function Page({ params }) {
   console.log('Successfully found blog post:', blogPost.fields.blogTitle || blogPost.fields.title);
   
   return (
-    <div className='darkBG'>
+    <div className="bg-[#f8f2e9] text-[#2f211d]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "BlogPosting",
+        headline: blogPost.fields.blogTitle, description: blogPost.fields.blogExcerpt,
+        datePublished: blogPost.fields.blogPublishDate, dateModified: blogPost.sys.updatedAt,
+        image: blogPost.fields.blogImage?.fields?.file?.url ? `https:${blogPost.fields.blogImage.fields.file.url}` : undefined,
+        author: { "@type": "Organization", name: "Resplandece Mujer" },
+        publisher: { "@type": "Organization", name: "Resplandece Mujer", logo: { "@type": "ImageObject", url: "https://www.resplandecemujer.com/assets/logo.png" } },
+        mainEntityOfPage: `https://www.resplandecemujer.com/blog/${encodeURIComponent(slug)}`, inLanguage: "es",
+      }).replace(/</g, "\\u003c") }} />
       <BlogPostHeader3 post={blogPost} />
       <Content27 post={blogPost} />
       <Testimonial5 postSlug={slug} />

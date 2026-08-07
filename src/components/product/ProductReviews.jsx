@@ -130,11 +130,12 @@ export function ProductReviews({ productId }) {
   };
 
   return (
-    <section id="reviews" className="darkBG px-[5%] py-16 md:py-24 lg:py-28">
+    <section id="reviews" className="border-t border-[#d8c2b5] bg-[#efe1d4] px-[5%] py-20 text-[#2f211d] md:py-28">
       <div className="container">
         {/* Title section */}
         <div className="mb-12 w-full md:mb-18 lg:mb-20">
-          <h2 className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl">
+          <p className="eyebrow mb-4 text-[#9b5b47]">Comunidad</p>
+          <h2 className="mb-5 text-5xl font-normal text-[#2f211d] md:mb-6 md:text-6xl">
             Reseñas del producto
           </h2>
           <div className="flex justify-between items-center">
@@ -152,8 +153,8 @@ export function ProductReviews({ productId }) {
         </div>
         
         {/* Review form */}
-        <div className="mb-16 p-6 border border-border-primary rounded-4xl">
-          <h3 className="text-2xl font-bold mb-4">Deja tu reseña</h3>
+        <div className="mb-16 rounded-[2rem] border border-[#e0cec2] bg-[#fffaf2] p-7 shadow-[0_12px_35px_rgba(72,44,35,.05)] md:p-10">
+          <h3 className="mb-6 text-3xl font-normal text-[#2f211d]">Deja tu reseña</h3>
           
           {submitSuccess && (
             <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -175,7 +176,7 @@ export function ProductReviews({ productId }) {
               <input
                 type="text"
                 id="name"
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#501E16]"
+                className="w-full rounded-2xl border border-[#d8c2b5] bg-[#fffdf8] p-3.5 text-[#2f211d] focus:ring-2 focus:ring-[#9b5b47]"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -211,7 +212,7 @@ export function ProductReviews({ productId }) {
               <textarea
                 id="review"
                 rows="4"
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#501E16]"
+                className="w-full rounded-2xl border border-[#d8c2b5] bg-[#fffdf8] p-3.5 text-[#2f211d] focus:ring-2 focus:ring-[#9b5b47]"
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 required
@@ -221,7 +222,7 @@ export function ProductReviews({ productId }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-3 bg-[#501E16] text-white rounded hover:bg-[#401810] transition-colors disabled:opacity-50"
+              className="button button-clay disabled:opacity-50"
             >
               {isSubmitting ? "Enviando..." : "Enviar reseña"}
             </button>
@@ -246,7 +247,7 @@ export function ProductReviews({ productId }) {
         ) : reviews.length > 0 ? (
           <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-16">
             {reviews.map((review, index) => (
-              <div key={review.id || index} className="flex h-full max-w-lg flex-col items-start justify-start text-left border border-border-primary rounded-4xl p-6">
+              <div key={review.id || index} className="flex h-full max-w-lg flex-col items-start justify-start rounded-[1.75rem] border border-[#e0cec2] bg-[#fffaf2] p-7 text-left">
                 <div className="mb-6 flex md:mb-8">
                   {[...Array(5)].map((_, i) => (
                     <BiSolidStar 
