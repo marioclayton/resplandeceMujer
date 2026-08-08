@@ -22,7 +22,7 @@ export function Blog1({ initialPosts = [] }) {
         <header className="mb-14 border-b border-[#d8c2b5] pb-14 text-center md:mb-20 md:pb-20">
           <div className="mx-auto max-w-3xl">
             <p className="eyebrow mb-5 text-[#9b5b47]">Reflexiones para tu camino</p>
-            <h1 className="text-[clamp(2.85rem,6.5vw,5.75rem)] font-normal leading-[1.02] tracking-[-.025em] text-[#2f211d]">
+            <h1 className="text-[clamp(2.6rem,5.6vw,5rem)] font-normal leading-[1.04] tracking-[-.025em] text-[#2f211d]">
               Descubre el poder transformador de la fe
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-[#66544d]">
@@ -34,8 +34,8 @@ export function Blog1({ initialPosts = [] }) {
         <section className="mb-16 grid gap-8 md:grid-cols-[.9fr_1.1fr] md:items-start lg:mb-20 lg:gap-16" aria-labelledby="blog-intro-title">
           <div>
             <p className="eyebrow text-[#9b5b47]">Un espacio para volver a lo esencial</p>
-            <h2 id="blog-intro-title" className="mt-4 text-4xl font-normal leading-tight text-[#2f211d] md:text-5xl">
-              Fe para los días luminosos y también para los difíciles.
+            <h2 id="blog-intro-title" className="mt-4 text-3xl font-normal leading-tight text-[#2f211d] md:text-4xl">
+              Fe para los días luminosos y también para los difíciles
             </h2>
           </div>
           <div className="space-y-5 text-lg leading-8 text-[#66544d]">
@@ -108,7 +108,7 @@ export function Blog1({ initialPosts = [] }) {
 
         <section className="mt-20 rounded-[2rem] bg-[#3c211b] px-7 py-12 text-center text-[#fff8ef] md:px-12 md:py-16">
           <p className="eyebrow text-[#e2ad94]">Lee a tu propio ritmo</p>
-          <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-normal leading-tight text-[#fff8ef] md:text-5xl">Una reflexión puede ser el comienzo de una conversación más profunda con Dios.</h2>
+          <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-normal leading-tight text-[#fff8ef] md:text-4xl">Una reflexión puede ser el comienzo de una conversación más profunda con Dios</h2>
           <p className="mx-auto mt-5 max-w-2xl leading-7 text-[#ddcbc1]">Haz una pausa antes de continuar con tu día. Anota una frase, comparte el artículo con una amiga o llévalo a tu tiempo de oración.</p>
         </section>
       </div>

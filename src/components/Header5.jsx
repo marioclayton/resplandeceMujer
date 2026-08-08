@@ -22,8 +22,8 @@ export function Header5() {
       <div className="container relative z-10 flex min-h-[92svh] items-center px-6 pb-16 pt-28 md:px-8">
         <div className="max-w-3xl">
           <p className="eyebrow mb-6 text-[#f1cbb8]">Fe · esperanza · propósito</p>
-          <h1 className="max-w-2xl text-[clamp(2.85rem,6.5vw,5.75rem)] font-normal leading-[1.02] tracking-[-.025em] text-[#fffaf2]">
-            Hay una luz en ti que merece resplandecer.
+          <h1 className="max-w-2xl text-[clamp(2.6rem,5.6vw,5rem)] font-normal leading-[1.04] tracking-[-.025em] text-[#fffaf2]">
+            Hay una luz en ti que merece resplandecer
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-[#f7eee5]/90 md:text-xl">
             Enseñanzas bíblicas y recursos para crecer en tu relación con

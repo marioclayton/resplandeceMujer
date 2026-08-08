@@ -6,6 +6,7 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-noto-sans), Arial, sans-serif; font-size: 16px; -webkit-font-smoothing: antialiased; }
 h1, h2, h3, h4, h5, h6 { font-family: var(--font-cuprum), Georgia, serif; letter-spacing: -0.025em; }
+main article > h1, main article > header h1 { font-size: clamp(2.6rem, 5.6vw, 5rem); line-height: 1.04; }
 .brand-wordmark { font-family: var(--font-cuprum), Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
 a, button { transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid #c6785e; outline-offset: 3px; }

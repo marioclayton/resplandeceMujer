@@ -135,7 +135,7 @@ export function ProductReviews({ productId }) {
         {/* Title section */}
         <div className="mb-12 w-full md:mb-18 lg:mb-20">
           <p className="eyebrow mb-4 text-[#9b5b47]">Comunidad</p>
-          <h2 className="mb-5 text-5xl font-normal text-[#2f211d] md:mb-6 md:text-6xl">
+          <h2 className="mb-5 text-4xl font-normal text-[#2f211d] md:mb-6 md:text-5xl">
             Reseñas del producto
           </h2>
           <div className="flex justify-between items-center">

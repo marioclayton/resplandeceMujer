@@ -33,7 +33,7 @@ export function ContactUs() {
         <header className="mb-14 border-b border-[#d8c2b5] pb-14 text-center md:mb-20 md:pb-20">
           <div className="mx-auto max-w-3xl">
             <p className="eyebrow mb-5 text-[#9b5b47]">Estamos cerca</p>
-            <h1 className="text-[clamp(2.85rem,6.5vw,5.75rem)] font-normal leading-[1.02] tracking-[-.025em] text-[#2f211d]">Nos encantará leerte</h1>
+            <h1 className="text-[clamp(2.6rem,5.6vw,5rem)] font-normal leading-[1.04] tracking-[-.025em] text-[#2f211d]">Nos encantará leerte</h1>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-[#66544d]">¿Tienes una pregunta, una historia que compartir o simplemente quieres saludar? Este espacio también se construye escuchándote.</p>
           </div>
         </header>
@@ -41,7 +41,7 @@ export function ContactUs() {
         <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[2rem] border border-[#e0cec2] bg-[#fffaf2] shadow-[0_18px_50px_rgba(72,44,35,.07)] lg:grid-cols-[.72fr_1.28fr]">
           <aside className="bg-[#3c211b] p-8 text-[#fff8ef] md:p-10">
             <RxEnvelopeClosed className="h-8 w-8 text-[#e2ad94]" />
-            <h2 className="mt-8 text-4xl font-normal leading-tight text-[#fff8ef]">Una conversación cercana y respetuosa.</h2>
+            <h2 className="mt-8 text-3xl font-normal leading-tight text-[#fff8ef]">Una conversación cercana y respetuosa</h2>
             <p className="mt-5 leading-7 text-[#ddcbc1]">Leemos cada mensaje con atención. Aunque la autora mantiene su identidad en privado, tu voz siempre es bienvenida.</p>
             <div className="mt-10 border-t border-white/15 pt-7"><p className="flex items-center gap-2 text-sm text-[#e2ad94]"><RxHeart /> Gracias por ser parte de esta comunidad.</p></div>
           </aside>

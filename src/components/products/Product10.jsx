@@ -14,7 +14,7 @@ export default function Product10({ products }) {
         <header className="mb-14 border-b border-[#d8c2b5] pb-14 text-center md:mb-20 md:pb-20">
           <div className="mx-auto max-w-3xl">
             <p className="eyebrow mb-5 text-[#9b5b47]">Recursos para crecer</p>
-            <h1 className="text-[clamp(2.85rem,6.5vw,5.75rem)] font-normal leading-[1.02] tracking-[-.025em] text-[#2f211d]">
+            <h1 className="text-[clamp(2.6rem,5.6vw,5rem)] font-normal leading-[1.04] tracking-[-.025em] text-[#2f211d]">
               Herramientas para acompañar tu fe
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-[#66544d]">
@@ -26,8 +26,8 @@ export default function Product10({ products }) {
         <section className="mb-16 grid gap-8 md:grid-cols-[.9fr_1.1fr] md:items-start lg:mb-20 lg:gap-16" aria-labelledby="resources-intro-title">
           <div>
             <p className="eyebrow text-[#9b5b47]">Más que una lectura</p>
-            <h2 id="resources-intro-title" className="mt-4 text-4xl font-normal leading-tight text-[#2f211d] md:text-5xl">
-              Recursos pensados para acompañar procesos reales.
+            <h2 id="resources-intro-title" className="mt-4 text-3xl font-normal leading-tight text-[#2f211d] md:text-4xl">
+              Recursos pensados para acompañar procesos reales
             </h2>
           </div>
           <div className="space-y-5 text-lg leading-8 text-[#66544d]">
@@ -76,7 +76,7 @@ export default function Product10({ products }) {
         <section className="mt-20 grid overflow-hidden rounded-[2rem] bg-[#3c211b] text-[#fff8ef] md:grid-cols-[1.1fr_.9fr]">
           <div className="p-8 md:p-12 lg:p-14">
             <p className="eyebrow text-[#e2ad94]">Cómo aprovecharlos</p>
-            <h2 className="mt-4 text-4xl font-normal leading-tight text-[#fff8ef] md:text-5xl">Haz espacio para lo que quieres cultivar.</h2>
+            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#fff8ef] md:text-4xl">Haz espacio para lo que quieres cultivar</h2>
             <p className="mt-5 max-w-xl leading-7 text-[#ddcbc1]">Elige un momento tranquilo, prepara un cuaderno y permite que cada pregunta te lleve más allá de una respuesta rápida. La transformación suele crecer en lo pequeño y constante.</p>
           </div>
           <div className="border-t border-white/15 p-8 md:border-l md:border-t-0 md:p-12 lg:p-14">

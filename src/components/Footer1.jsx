@@ -31,7 +31,7 @@ export function Footer1() {
               <Image src="/assets/logo.png" alt="Resplandece Mujer" width={56} height={56} />
               <span className="font-[var(--font-cuprum)] text-2xl">Resplandece Mujer</span>
             </div>
-            <h2 className="mt-8 text-4xl leading-tight text-[#fff8ef] md:text-5xl">Un momento de quietud, directo a tu bandeja.</h2>
+            <h2 className="mt-8 text-3xl leading-tight text-[#fff8ef] md:text-4xl">Un momento de quietud, directo a tu bandeja</h2>
             <p className="mt-4 leading-7 text-[#d9c8be]">Recibe nuevas reflexiones, recursos y palabras de ánimo para tu caminar.</p>
             <form onSubmit={subscribe} className="mt-7 flex max-w-lg flex-col gap-3 sm:flex-row">
               <label className="sr-only" htmlFor="footer-email">Correo electrónico</label>

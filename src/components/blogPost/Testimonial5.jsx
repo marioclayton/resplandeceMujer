@@ -150,7 +150,7 @@ export function Testimonial5({ postSlug }) {
         {/* Title section */}
         <div className="mb-12 w-full md:mb-18 lg:mb-20">
           <p className="eyebrow mb-4 text-[#9b5b47]">Conversación</p>
-          <h2 className="mb-5 text-5xl font-normal text-[#2f211d] md:mb-6 md:text-6xl">
+          <h2 className="mb-5 text-4xl font-normal text-[#2f211d] md:mb-6 md:text-5xl">
             Testimonios de lectoras
           </h2>
           <div className="flex justify-between items-center">

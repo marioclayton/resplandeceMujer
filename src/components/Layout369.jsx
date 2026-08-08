@@ -17,7 +17,7 @@ export function Layout369({ layoutData }) {
         <div className="section-heading md:flex md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="eyebrow text-[#9b5b47]">Para tu camino</p>
-            <h2 className="mt-4 text-5xl leading-none text-[#2f211d] md:text-7xl">
+            <h2 className="mt-4 text-4xl leading-none text-[#2f211d] md:text-6xl">
               Palabras para esta temporada
             </h2>
           </div>

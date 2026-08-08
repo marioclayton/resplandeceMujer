@@ -30,8 +30,8 @@ export function Layout4() {
         <div className="container px-6 md:px-8">
           <div className="max-w-2xl">
             <p className="eyebrow text-[#8d4d3c]">Un lugar para crecer</p>
-            <h2 className="mt-4 text-5xl leading-none text-[#2f211d] md:text-7xl">
-              Tu vida espiritual también necesita espacio para respirar.
+            <h2 className="mt-4 text-4xl leading-none text-[#2f211d] md:text-6xl">
+              Tu vida espiritual también necesita espacio para respirar
             </h2>
           </div>
           <div className="mt-12 grid gap-px overflow-hidden rounded-[2rem] bg-[#cbaea0] md:grid-cols-3">
@@ -62,8 +62,8 @@ export function Layout4() {
           </div>
           <div className="max-w-xl">
             <p className="eyebrow text-[#e6bca8]">Nuestra esencia</p>
-            <h2 className="mt-4 text-5xl leading-none text-[#fff8ef] md:text-7xl">
-              Una voz cercana, sin protagonismos.
+            <h2 className="mt-4 text-4xl leading-none text-[#fff8ef] md:text-6xl">
+              Una voz cercana, sin protagonismos
             </h2>
             <p className="mt-6 text-lg leading-8 text-[#eadbd2]">
               Resplandece Mujer nació para señalar hacia Jesús, no hacia una persona.
@@ -80,8 +80,8 @@ export function Layout4() {
       <section className="px-6 py-20 md:px-8 md:py-28">
         <div className="container rounded-[2.5rem] bg-[#b9694f] px-7 py-14 text-center md:px-14 md:py-20">
           <p className="eyebrow text-[#ffe0d0]">Un regalo para comenzar</p>
-          <h2 className="mx-auto mt-4 max-w-3xl text-5xl leading-none text-white md:text-7xl">
-            Descubre tu identidad en Dios, un día a la vez.
+          <h2 className="mx-auto mt-4 max-w-3xl text-4xl leading-none text-white md:text-6xl">
+            Descubre tu identidad en Dios, un día a la vez
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#fff3ed]">
             Explora nuestro devocional gratuito de 30 días y crea un ritmo de

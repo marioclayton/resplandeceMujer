@@ -22,7 +22,7 @@ export function BlogPostHeader3({ post }) {
         </nav>
         <div className="mx-auto max-w-4xl text-center">
           {blogCategories && <p className="eyebrow text-[#9b5b47]">{blogCategories}</p>}
-          <h1 className="mt-5 text-[clamp(2.85rem,6.5vw,5.75rem)] font-normal leading-[1.02] tracking-[-.025em] text-[#2f211d]">{blogTitle}</h1>
+          <h1 className="mt-5 text-[clamp(2.6rem,5.6vw,5rem)] font-normal leading-[1.04] tracking-[-.025em] text-[#2f211d]">{blogTitle}</h1>
           {blogExcerpt && <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-[#66544d]">{blogExcerpt}</p>}
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3 text-sm text-[#8a746b]">
             {blogAuthor && <span>{blogAuthor}</span>}{blogAuthor && formattedDate && <span className="text-[#c5a99a]">•</span>}{formattedDate && <time>{formattedDate}</time>}<span className="text-[#c5a99a]">•</span><span>5 min de lectura</span>
