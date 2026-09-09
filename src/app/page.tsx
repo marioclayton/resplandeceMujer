@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { createClient } from 'contentful';
 import { Header5 } from "../components/Header5";
 import { Layout369 } from "../components/Layout369";
+import { HomeMessages } from "../components/HomeMessages";
 import { Layout4 } from "../components/Layout4";
 
 export const metadata: Metadata = {
@@ -60,6 +61,7 @@ export default async function Page() {
       }).replace(/</g, "\\u003c") }} />
       <Header5 />
       <Layout369 layoutData={layoutData} />
+      <HomeMessages />
       <Layout4 />
     </div>
   );

@@ -15,7 +15,7 @@ export function Navbar1() {
     onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const links = [["Inicio", "/"], ["Blog", "/blog"], ["Acerca", "/acerca"], ["Productos", "/productos"], ["Contacto", "/contacto"]];
+  const links = [["Inicio", "/"], ["Blog", "/blog"], ["Mensajes", "/mensajes"], ["Acerca", "/acerca"], ["Productos", "/productos"], ["Contacto", "/contacto"]];
 
   return (
     <header className={`fixed inset-x-0 top-0 z-[999] px-[5%] transition-all ${!isHomePage || scrolled || open ? "bg-[#2d1b17]/95 shadow-lg backdrop-blur-md" : "bg-[#2d1b17]/35 backdrop-blur-sm"}`}>

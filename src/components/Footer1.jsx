@@ -42,7 +42,7 @@ export function Footer1() {
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-            <div><p className="eyebrow text-[#dba991]">Explora</p><div className="mt-4 flex flex-col gap-3 text-sm text-[#e7d8d0]"><Link href="/blog">Blog</Link><Link href="/productos">Recursos</Link><Link href="/acerca">Acerca</Link><Link href="/contacto">Contacto</Link></div></div>
+            <div><p className="eyebrow text-[#dba991]">Explora</p><div className="mt-4 flex flex-col gap-3 text-sm text-[#e7d8d0]"><Link href="/blog">Blog</Link><Link href="/mensajes">Mensajes</Link><Link href="/productos">Recursos</Link><Link href="/acerca">Acerca</Link><Link href="/contacto">Contacto</Link></div></div>
             <div><p className="eyebrow text-[#dba991]">Legal</p><div className="mt-4 flex flex-col gap-3 text-sm text-[#e7d8d0]"><Link href="/privacidad">Privacidad y cookies</Link><Link href="/terminos">Términos de uso</Link><Link href="/aviso-legal">Aviso legal</Link></div></div>
             <div><p className="eyebrow text-[#dba991]">Síguenos</p><div className="mt-4 flex gap-3 text-2xl"><a aria-label="Facebook" href="https://www.facebook.com/profile.php?id=61565177074140" target="_blank" rel="noreferrer"><BiLogoFacebookCircle /></a><a aria-label="Instagram" href="https://www.instagram.com/resp.landecemujer/" target="_blank" rel="noreferrer"><BiLogoInstagram /></a><a aria-label="YouTube" href="https://www.youtube.com/@ResplandeceMujer-m1o" target="_blank" rel="noreferrer"><BiLogoYoutube /></a></div></div>
           </div>

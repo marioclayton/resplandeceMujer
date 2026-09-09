@@ -4,7 +4,7 @@ import { createClient } from "contentful";
 const baseUrl = "https://www.resplandecemujer.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes: MetadataRoute.Sitemap = ["", "/blog", "/productos", "/acerca", "/contacto", "/privacidad", "/terminos", "/aviso-legal"].map((path) => ({ url: `${baseUrl}${path}`, lastModified: new Date(), changeFrequency: path === "" ? "weekly" : "monthly", priority: path === "" ? 1 : path === "/blog" ? 0.9 : 0.6 }));
+  const staticRoutes: MetadataRoute.Sitemap = ["", "/blog", "/mensajes", "/productos", "/acerca", "/contacto", "/privacidad", "/terminos", "/aviso-legal"].map((path) => ({ url: `${baseUrl}${path}`, lastModified: new Date(), changeFrequency: path === "" || path === "/mensajes" ? "weekly" : "monthly", priority: path === "" ? 1 : path === "/blog" || path === "/mensajes" ? 0.9 : 0.6 }));
   try {
     const client = createClient({ space: process.env.CONTENTFUL_SPACE_ID || "", accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "" });
     const [posts, products] = await Promise.all([
