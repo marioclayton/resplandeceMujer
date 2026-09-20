@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { RxArrowRight } from "react-icons/rx";
-import { messages } from "../../data/messages";
+import { getShortMessages } from "../../lib/messages";
 
 export const metadata: Metadata = {
   title: "Mensajes de fe y esperanza",
@@ -9,7 +10,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/mensajes" },
 };
 
-export default function MensajesPage() {
+// Keep newly published Contentful messages reasonably fresh without fetching
+// on every request.
+export const revalidate = 60;
+
+export default async function MensajesPage() {
+  const messages = await getShortMessages();
   const [featured, ...remaining] = messages;
 
   return (
@@ -28,14 +34,17 @@ export default function MensajesPage() {
             </p>
           </header>
 
-          <article className="relative mt-14 overflow-hidden rounded-[2.25rem] bg-[#3c211b] px-7 py-12 text-[#fff8ef] md:mt-20 md:px-14 md:py-16 lg:px-20">
-            <div className="absolute -right-12 -top-20 h-64 w-64 rounded-full bg-[#b9694f]/25 blur-3xl" aria-hidden="true" />
-            <div className="relative max-w-4xl">
+          <article className="mt-14 grid overflow-hidden rounded-[2.25rem] bg-[#3c211b] text-[#fff8ef] md:mt-20 lg:grid-cols-[.85fr_1.15fr]">
+            <div className="relative min-h-80 lg:min-h-[34rem]">
+              <Image src={featured.image} alt={featured.imageAlt} fill sizes="(max-width: 1024px) 100vw, 42vw" className="object-cover" style={{ objectPosition: featured.imagePosition }} />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#3c211b]/35 to-transparent lg:bg-gradient-to-r" aria-hidden="true" />
+            </div>
+            <div className="relative flex flex-col justify-center px-7 py-12 md:px-14 md:py-16 lg:px-16">
               <div className="flex items-start justify-between gap-6">
                 <p className="eyebrow text-[#e2ad94]">{featured.theme} · mensaje destacado</p>
                 <span className="font-[var(--font-cuprum)] text-7xl leading-[.6] text-[#e2ad94]/55" aria-hidden="true">“</span>
               </div>
-              <blockquote className="mt-9 font-[var(--font-cuprum)] text-4xl leading-[1.12] tracking-[-.025em] md:text-6xl">
+              <blockquote className="mt-8 font-[var(--font-noto-sans)] text-xl font-normal leading-[1.65] tracking-normal md:text-2xl">
                 {featured.text}
               </blockquote>
               <p className="mt-9 text-sm text-[#d8c5bb]">{featured.reference}</p>
@@ -50,17 +59,22 @@ export default function MensajesPage() {
 
             <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {remaining.map((message, index) => (
-                <article key={message.id} className={`flex min-h-80 flex-col justify-between rounded-[2rem] border p-8 ${index % 3 === 1 ? "border-[#d5b3a1] bg-[#e7cbbd]" : "border-[#dfcbbf] bg-[#fffaf2]"}`}>
-                  <div>
+                <article key={message.id} className={`overflow-hidden rounded-[2rem] border ${index % 3 === 1 ? "border-[#d5b3a1] bg-[#e7cbbd]" : "border-[#dfcbbf] bg-[#fffaf2]"}`}>
+                  <div className="relative aspect-[3/2] overflow-hidden">
+                    <Image src={message.image} alt={message.imageAlt} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition duration-700 hover:scale-[1.025]" style={{ objectPosition: message.imagePosition }} />
+                  </div>
+                  <div className="flex min-h-72 flex-col justify-between p-7 md:p-8">
+                    <div>
                     <div className="flex items-center justify-between gap-4">
                       <p className="eyebrow text-[#8d4d3c]">{message.theme}</p>
                       <span className="font-[var(--font-cuprum)] text-5xl leading-none text-[#b9694f]/50" aria-hidden="true">“</span>
                     </div>
-                    <blockquote className="mt-7 font-[var(--font-cuprum)] text-[1.7rem] leading-[1.22] tracking-[-.02em] text-[#2f211d]">
+                    <blockquote className="mt-5 font-[var(--font-noto-sans)] text-[1.08rem] font-normal leading-[1.75] tracking-normal text-[#2f211d]">
                       {message.text}
                     </blockquote>
+                    </div>
+                    <p className="mt-8 text-sm text-[#755f56]">{message.reference}</p>
                   </div>
-                  <p className="mt-10 text-sm text-[#755f56]">{message.reference}</p>
                 </article>
               ))}
             </div>

@@ -5,6 +5,7 @@ import { Header5 } from "../components/Header5";
 import { Layout369 } from "../components/Layout369";
 import { HomeMessages } from "../components/HomeMessages";
 import { Layout4 } from "../components/Layout4";
+import { getShortMessages } from "../lib/messages";
 
 export const metadata: Metadata = {
   title: "Resplandece Mujer | Crece en tu relación con Jesucristo",
@@ -12,8 +13,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-// Revalidate every hour to reduce API usage
-export const revalidate = 3600;
+// Refresh frequently enough for newly published short messages to reach the
+// homepage promptly while retaining static-page performance.
+export const revalidate = 60;
 
 // Initialize Contentful client
 const client = createClient({
@@ -32,13 +34,17 @@ async function getHomePageData() {
       limit: 3
     });
 
+    const messages = await getShortMessages(3);
+
     return {
       blogs: blogsResponse.items || [],
+      messages,
     };
   } catch (error) {
     console.error('Error fetching home page data:', error);
     return {
       blogs: [],
+      messages: await getShortMessages(3),
     };
   }
 }
@@ -61,7 +67,7 @@ export default async function Page() {
       }).replace(/</g, "\\u003c") }} />
       <Header5 />
       <Layout369 layoutData={layoutData} />
-      <HomeMessages />
+      <HomeMessages messages={layoutData.messages} />
       <Layout4 />
     </div>
   );

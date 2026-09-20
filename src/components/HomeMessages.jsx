@@ -1,8 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { RxArrowRight } from "react-icons/rx";
-import { messages } from "../data/messages";
 
-export function HomeMessages() {
+export function HomeMessages({ messages }) {
   const featuredMessages = messages.slice(0, 3);
 
   return (
@@ -24,18 +24,33 @@ export function HomeMessages() {
           {featuredMessages.map((message, index) => (
             <article
               key={message.id}
-              className={`flex min-h-80 flex-col justify-between rounded-[2rem] p-8 md:p-10 ${index === 1 ? "bg-[#3c211b] text-[#fff8ef]" : "border border-[#dfcbbf] bg-[#efe1d4] text-[#2f211d]"}`}
+              className={`flex overflow-hidden rounded-[2rem] ${index === 1 ? "bg-[#3c211b] text-[#fff8ef]" : "border border-[#dfcbbf] bg-[#efe1d4] text-[#2f211d]"}`}
             >
-              <div>
+              <div className="flex w-full flex-col">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={message.image}
+                    alt={message.imageAlt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    className="object-cover transition duration-700 hover:scale-[1.025]"
+                    style={{ objectPosition: message.imagePosition }}
+                  />
+                  <div className={`absolute inset-0 ${index === 1 ? "bg-[#3c211b]/10" : "bg-[#6c3b2e]/5"}`} aria-hidden="true" />
+                </div>
+                <div className="flex flex-1 flex-col justify-between p-7 md:p-8">
+                  <div>
                 <div className="flex items-center justify-between gap-4">
                   <p className={`eyebrow ${index === 1 ? "text-[#e2ad94]" : "text-[#8d4d3c]"}`}>{message.theme}</p>
                   <span className={`font-[var(--font-cuprum)] text-5xl leading-none ${index === 1 ? "text-[#e2ad94]/70" : "text-[#b9694f]/55"}`} aria-hidden="true">“</span>
                 </div>
-                <blockquote className="mt-7 font-[var(--font-cuprum)] text-[1.75rem] leading-[1.2] tracking-[-.02em]">
+                <blockquote className="mt-5 font-[var(--font-noto-sans)] text-[1.08rem] font-normal leading-[1.75] tracking-normal">
                   {message.text}
                 </blockquote>
+                  </div>
+                  <p className={`mt-8 text-sm ${index === 1 ? "text-[#d8c5bb]" : "text-[#755f56]"}`}>{message.reference}</p>
+                </div>
               </div>
-              <p className={`mt-10 text-sm ${index === 1 ? "text-[#d8c5bb]" : "text-[#755f56]"}`}>{message.reference}</p>
             </article>
           ))}
         </div>
