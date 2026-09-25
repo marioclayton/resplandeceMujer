@@ -44,7 +44,7 @@ export default async function MensajesPage() {
                 <p className="eyebrow text-[#e2ad94]">{featured.theme} · mensaje destacado</p>
                 <span className="font-[var(--font-cuprum)] text-7xl leading-[.6] text-[#e2ad94]/55" aria-hidden="true">“</span>
               </div>
-              <blockquote className="mt-8 font-[var(--font-noto-sans)] text-xl font-normal leading-[1.65] tracking-normal md:text-2xl">
+              <blockquote className="whitespace-pre-wrap mt-8 font-[var(--font-noto-sans)] text-xl font-normal leading-[1.65] tracking-normal md:text-2xl">
                 {featured.text}
               </blockquote>
               <p className="mt-9 text-sm text-[#d8c5bb]">{featured.reference}</p>
@@ -69,7 +69,7 @@ export default async function MensajesPage() {
                       <p className="eyebrow text-[#8d4d3c]">{message.theme}</p>
                       <span className="font-[var(--font-cuprum)] text-5xl leading-none text-[#b9694f]/50" aria-hidden="true">“</span>
                     </div>
-                    <blockquote className="mt-5 font-[var(--font-noto-sans)] text-[1.08rem] font-normal leading-[1.75] tracking-normal text-[#2f211d]">
+                    <blockquote className="whitespace-pre-wrap mt-5 font-[var(--font-noto-sans)] text-[1.08rem] font-normal leading-[1.75] tracking-normal text-[#2f211d]">
                       {message.text}
                     </blockquote>
                     </div>

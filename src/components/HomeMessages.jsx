@@ -44,7 +44,7 @@ export function HomeMessages({ messages }) {
                   <p className={`eyebrow ${index === 1 ? "text-[#e2ad94]" : "text-[#8d4d3c]"}`}>{message.theme}</p>
                   <span className={`font-[var(--font-cuprum)] text-5xl leading-none ${index === 1 ? "text-[#e2ad94]/70" : "text-[#b9694f]/55"}`} aria-hidden="true">“</span>
                 </div>
-                <blockquote className="mt-5 font-[var(--font-noto-sans)] text-[1.08rem] font-normal leading-[1.75] tracking-normal">
+                <blockquote className="whitespace-pre-wrap mt-5 font-[var(--font-noto-sans)] text-[1.08rem] font-normal leading-[1.75] tracking-normal">
                   {message.text}
                 </blockquote>
                   </div>
